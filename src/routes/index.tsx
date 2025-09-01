@@ -1,5 +1,5 @@
 import App from "@/App";
-import AAbout from "@/pages/AAbout";
+import AboutUs from "@/pages/AboutUs";
 import { createBrowserRouter } from "react-router";
 
 export const router = createBrowserRouter([
@@ -9,7 +9,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "about",
-        Component: AAbout,
+        Component: AboutUs,
       },
     ],
   },
