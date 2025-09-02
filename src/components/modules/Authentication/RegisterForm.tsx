@@ -14,31 +14,38 @@ import { Link } from "react-router";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Password from "@/components/ui/Password";
+import type React from "react";
+import { useRegisterMutation } from "@/redux/features/auth/auth.api";
+import { toast } from "sonner";
 
-const registerSchema = z.object({
-  name: z
-    .string({ error: "Name must be string" })
-    .min(3, {
-      error: "Name is too short",
-    })
-    .max(50, { error: "Name is too long" }),
-  email: z.email(),
-  password: z
-    .string({ error: "Password must be string" })
-    .min(8, { error: "Password is too short" })
-    .regex(/^(?=.*[A-Z])/, {
-      message: "Password must contain atleast 1 uppercase letter",
-    })
-    .regex(/^(?=.*[!@#$%^&*])/, {
-      message: "Password must contain 1 special character",
-    }),
-  confirmPassword: z.string().min(8, { error: "Password is too short" }),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Password don't matched",
-  path: ["confirmPassword"]
-});
+const registerSchema = z
+  .object({
+    name: z
+      .string({ error: "Name must be string" })
+      .min(3, {
+        error: "Name is too short",
+      })
+      .max(50, { error: "Name is too long" }),
+    email: z.email(),
+    password: z
+      .string({ error: "Password must be string" })
+      .min(8, { error: "Password is too short" })
+      .regex(/^(?=.*[A-Z])/, {
+        message: "Password must contain atleast 1 uppercase letter",
+      })
+      .regex(/^(?=.*[!@#$%^&*])/, {
+        message: "Password must contain 1 special character",
+      }),
+    confirmPassword: z.string().min(8, { error: "Password is too short" }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Password don't matched",
+    path: ["confirmPassword"],
+  });
 
 const RegisterForm = () => {
+  const [register] = useRegisterMutation();
+
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -49,8 +56,19 @@ const RegisterForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof registerSchema>) => {
-    console.log("🚀 ~ onSubmit ~ values:", values);
+  const onSubmit = async (data: z.infer<typeof registerSchema>) => {
+    const userInfo = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+    };
+    try {
+      const result = await register(userInfo).unwrap();
+      console.log(result);
+      toast.success("User created successfully");
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div>
