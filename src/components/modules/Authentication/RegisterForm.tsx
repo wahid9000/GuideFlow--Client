@@ -14,19 +14,38 @@ import { Link } from "react-router";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const formSchema = z.object({
-  name: z.string().min(2),
+const registerSchema = z.object({
+  name: z
+    .string({ error: "Name must be string" })
+    .min(3, {
+      error: "Name is too short",
+    })
+    .max(50, { error: "Name is too long" }),
+  email: z.email(),
+  password: z
+    .string({ error: "Password must be string" })
+    .min(8, { error: "Password is too short" })
+    .regex(/^(?=.*[A-Z])/, {
+      message: "Password must contain atleast 1 uppercase letter",
+    })
+    .regex(/^(?=.*[!@#$%^&*])/, {
+      message: "Password must contain 1 special character",
+    }),
+  confirmPassword: z.string().min(8, { error: "Password is too short" }),
 });
 
 const RegisterForm = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof registerSchema>>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = (values: z.infer<typeof registerSchema>) => {
     console.log("🚀 ~ onSubmit ~ values:", values);
   };
   return (
@@ -39,7 +58,7 @@ const RegisterForm = () => {
       </div>
       <div className="grid gap-6">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
               name="name"
@@ -47,16 +66,71 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Name*" {...field} />
+                    <Input placeholder="Einstein Doe*" {...field} />
                   </FormControl>
                   <FormDescription className="sr-only">
-                    This is your public display name.
+                    This is your name.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="email@gmail.com"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription className="sr-only">
+                    This is your email.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="********" {...field} />
+                  </FormControl>
+                  <FormDescription className="sr-only">
+                    This is your password.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="********" {...field} />
+                  </FormControl>
+                  <FormDescription className="sr-only">
+                    This is your confirm password.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button type="submit" className="w-full text-white">
+              Submit
+            </Button>
           </form>
         </Form>
 
