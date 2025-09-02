@@ -1,3 +1,4 @@
+import Logo from "@/assets/icons/Logo";
 import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 
 const Footer = () => {
@@ -8,7 +9,9 @@ const Footer = () => {
           {/* Newsletter / Branding */}
           <div className="mt-8 grid grid-cols-2 gap-8 lg:mt-0 lg:grid-cols-5 lg:gap-y-16">
             <div className="col-span-2">
-              <h2 className="text-2xl font-bold text-foreground">TourUs</h2>
+              <h2 className="text-2xl font-bold text-foreground flex gap-2 items-center">
+                <Logo></Logo> TourUs
+              </h2>
               <p className="mt-4 text-muted-foreground">
                 Discover the world like never before with TourUs – your ultimate
                 travel companion.
