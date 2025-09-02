@@ -33,6 +33,9 @@ const registerSchema = z.object({
       message: "Password must contain 1 special character",
     }),
   confirmPassword: z.string().min(8, { error: "Password is too short" }),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Password don't matched",
+  path: ["confirmPassword"]
 });
 
 const RegisterForm = () => {
