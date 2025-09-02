@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Password from "@/components/ui/Password";
 
 const registerSchema = z.object({
   name: z
@@ -102,7 +103,7 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="********" {...field} />
+                    <Password {...field} />
                   </FormControl>
                   <FormDescription className="sr-only">
                     This is your password.
@@ -118,7 +119,7 @@ const RegisterForm = () => {
                 <FormItem>
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="********" {...field} />
+                    <Password {...field} />
                   </FormControl>
                   <FormDescription className="sr-only">
                     This is your confirm password.
