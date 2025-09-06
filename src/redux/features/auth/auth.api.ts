@@ -2,7 +2,7 @@ import { baseApi } from "@/redux/baseApi";
 import type { ILogin, IResponse, ISendOTP } from "@/types";
 import type { IVerifyOTP } from "@/types/auth.type";
 
-const authApi = baseApi.injectEndpoints({
+export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => {
     return {
       register: builder.mutation({
