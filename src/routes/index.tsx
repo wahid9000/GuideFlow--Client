@@ -10,6 +10,7 @@ import Verify from "@/pages/Verify";
 import { generateRoutes } from "@/utils/generateRoutes";
 import { createBrowserRouter } from "react-router";
 import { adminSidebarItems } from "./adminSidebarItems";
+import { userSidebarItems } from "./userSidebarItems";
 
 export const router = createBrowserRouter([
   {
@@ -25,17 +26,12 @@ export const router = createBrowserRouter([
   {
     path: "/admin",
     Component: DashboardLayout,
-    children: generateRoutes(adminSidebarItems),
+    children: [...generateRoutes(adminSidebarItems)],
   },
   {
     path: "/user",
     Component: DashboardLayout,
-    children: [
-      {
-        path: "bookings",
-        Component: Bookings,
-      },
-    ],
+    children: [...generateRoutes(userSidebarItems)],
   },
   {
     path: "/login",
