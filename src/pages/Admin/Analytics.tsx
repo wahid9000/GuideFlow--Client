@@ -2,7 +2,7 @@
 const Analytics = () => {
     return (
         <div>
-            
+            This is Analytics
         </div>
     );
 };
