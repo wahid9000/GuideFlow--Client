@@ -13,6 +13,11 @@ import {
 } from "@/components/ui/popover";
 import { ModeToggle } from "./ModeToggler";
 import { Link } from "react-router";
+import {
+  useLogoutMutation,
+  useUserInfoQuery,
+} from "@/redux/features/auth/auth.api";
+import { toast } from "sonner";
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
@@ -21,6 +26,14 @@ const navigationLinks = [
 ];
 
 export default function Navbar() {
+  const { data } = useUserInfoQuery(undefined);
+  const userExists = data?.data?.email;
+  const [logout] = useLogoutMutation();
+
+  const handleLogout = () => {
+    logout(undefined);
+    toast.success("Logout successful");
+  };
   return (
     <header className="border-b">
       <div className="container  mx-auto px-4 flex h-16 items-center justify-between gap-4">
@@ -75,9 +88,19 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           <ModeToggle></ModeToggle>
 
-          <Button asChild className="text-sm text-foreground">
-            <Link to="/login">Login</Link>
-          </Button>
+          {userExists ? (
+            <Button
+              onClick={handleLogout}
+              variant={"outline"}
+              className="text-sm text-foreground"
+            >
+              Logout
+            </Button>
+          ) : (
+            <Button asChild className="text-sm text-foreground">
+              <Link to="/login">Login</Link>
+            </Button>
+          )}
         </div>
       </div>
     </header>

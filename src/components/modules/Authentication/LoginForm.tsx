@@ -10,10 +10,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Password from "@/components/ui/Password";
+import config from "@/config";
 import { useLoginMutation } from "@/redux/features/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 import z from "zod";
 
@@ -31,6 +32,7 @@ const loginSchema = z.object({
 });
 
 const LoginForm = () => {
+  const navigate = useNavigate();
   const [login] = useLoginMutation();
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -47,10 +49,20 @@ const LoginForm = () => {
     };
     try {
       const result = await login(authInfo).unwrap();
-      console.log(result);
-      toast.success("User logged In successfully");
-    } catch (error) {
-      console.log(error);
+      if (result) {
+        toast.success("User logged In successfully");
+        navigate("/");
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error.data.message === "Password is not correct") {
+        toast.error("Invalid Credentials");
+      }
+
+      if (error.data.message === "User is not verified") {
+        toast.error("Your account is not verified. Please Verify ...");
+        navigate("/verify", { state: data.email });
+      }
     }
   };
 
@@ -116,6 +128,7 @@ const LoginForm = () => {
           </div>
 
           <Button
+            onClick={() => window.open(`${config.baseUrl}/auth/google`)}
             type="button"
             variant="outline"
             className="w-full cursor-pointer"
