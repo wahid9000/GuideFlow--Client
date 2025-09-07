@@ -14,7 +14,6 @@ import { Link, useNavigate } from "react-router";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Password from "@/components/ui/Password";
-import type React from "react";
 import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 import { toast } from "sonner";
 
@@ -67,7 +66,7 @@ const RegisterForm = () => {
       const result = await register(userInfo).unwrap();
       console.log(result);
       toast.success("User created successfully");
-      navigate("/verify");
+      navigate("/login");
     } catch (error) {
       console.log(error);
     }
@@ -152,7 +151,7 @@ const RegisterForm = () => {
               )}
             />
 
-            <Button type="submit" className="w-full text-white">
+            <Button type="submit" className="cursor-pointer w-full text-white">
               Submit
             </Button>
           </form>

@@ -31,14 +31,14 @@ const navigationLinks = [
 ];
 
 export default function Navbar() {
-  const dispatch = useAppDispatch();
-  const { data, isLoading } = useUserInfoQuery(undefined);
+  const { data } = useUserInfoQuery(undefined);
   const userExists = data?.data?.email;
   const [logout] = useLogoutMutation();
+  const dispatch = useAppDispatch();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await logout(undefined);
     dispatch(authApi.util.resetApiState());
-    logout(undefined);
     toast.success("Logout successful");
   };
 
@@ -115,12 +115,12 @@ export default function Navbar() {
             <Button
               onClick={handleLogout}
               variant={"outline"}
-              className="text-sm text-foreground"
+              className="text-sm text-foreground cursor-pointer"
             >
               Logout
             </Button>
           ) : (
-            <Button asChild className="text-sm text-foreground">
+            <Button asChild className="text-sm text-foreground cursor-pointer">
               <Link to="/login">Login</Link>
             </Button>
           )}

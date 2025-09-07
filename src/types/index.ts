@@ -2,6 +2,7 @@ import type { ComponentType } from "react";
 
 export type { ISendOTP } from "./auth.type";
 export type { ILogin } from "./auth.type";
+export type { IVerifyOTP } from "./auth.type";
 
 export interface IResponse<T> {
   success: boolean;

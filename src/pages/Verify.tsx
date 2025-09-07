@@ -90,7 +90,7 @@ const Verify = () => {
       const res = await verifyOtp({ email: email, otp: values.otp }).unwrap();
       if (res.success) {
         toast.success("Verified Successfully", { id: toastId });
-        navigate("/");
+        navigate("/login");
       }
     } catch (error) {
       toast.error("Invalid OTP", { id: toastId });
@@ -193,7 +193,10 @@ const Verify = () => {
           </CardHeader>
 
           <CardFooter className="mx-auto">
-            <Button onClick={handleSendOTP} className="text-white">
+            <Button
+              onClick={handleSendOTP}
+              className="cursor-pointer text-white"
+            >
               Confirm
             </Button>
           </CardFooter>

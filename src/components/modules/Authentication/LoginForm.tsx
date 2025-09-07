@@ -115,7 +115,10 @@ const LoginForm = () => {
                 )}
               />
 
-              <Button type="submit" className="w-full text-white">
+              <Button
+                type="submit"
+                className="cursor-pointer w-full text-white"
+              >
                 Submit
               </Button>
             </form>
