@@ -19,8 +19,8 @@ import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: userInfo } = useUserInfoQuery(undefined);
-  const userRole = userInfo?.data?.role
-  console.log("🚀 ~ AppSidebar ~ userRole:", userRole)
+  const userRole = userInfo?.data?.role;
+  console.log("🚀 ~ AppSidebar ~ userRole:", userRole);
   const data = {
     navMain: getSidebarItems(userRole),
   };
@@ -28,9 +28,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <div className="flex justify-start items-center gap-2">
+        <Link className="flex justify-start items-center gap-2" to={"/"}>
           <Logo /> <h1 className="text-2xl font-bold">TourUs</h1>
-        </div>
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}
