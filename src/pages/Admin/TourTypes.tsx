@@ -1,4 +1,7 @@
-import { useGetTourTypesQuery } from "@/redux/features/tour/tour.api";
+import {
+  useDeleteTourTypeMutation,
+  useGetTourTypesQuery,
+} from "@/redux/features/tour/tour.api";
 import {
   Table,
   TableBody,
@@ -10,9 +13,24 @@ import {
 import { Button } from "@/components/ui/button";
 import { EditIcon, Trash } from "lucide-react";
 import AddTourTypeModal from "@/components/modules/Admin/TourType/AddTourTypeModal";
+import DeleteConfirmation from "@/components/DeleteConfirmation";
+import { toast } from "sonner";
 
 const TourTypes = () => {
   const { data } = useGetTourTypesQuery(undefined);
+  const [deleteTourType] = useDeleteTourTypeMutation();
+
+  const handleDeleteTourType = async (tourTypeId: string) => {
+    const toastId = toast.loading("Deleting...");
+    try {
+      const res = await deleteTourType(tourTypeId).unwrap();
+      if (res.success) {
+        toast.success("Tour Type Deleted Successfully", { id: toastId });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="w-full max-w-5xl mx-auto">
       <div className="flex justify-between mb-6 items-center">
@@ -39,12 +57,16 @@ const TourTypes = () => {
                       <Button variant={"outline"} className="cursor-pointer">
                         <EditIcon />
                       </Button>
-                      <Button
-                        variant={"destructive"}
-                        className="cursor-pointer"
+                      <DeleteConfirmation
+                        onConfirm={() => handleDeleteTourType(tourType._id)}
                       >
-                        <Trash />
-                      </Button>
+                        <Button
+                          variant={"destructive"}
+                          className="cursor-pointer"
+                        >
+                          <Trash />
+                        </Button>
+                      </DeleteConfirmation>
                     </div>
                   </TableCell>
                 </TableRow>
