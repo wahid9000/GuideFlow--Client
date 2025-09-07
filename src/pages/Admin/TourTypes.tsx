@@ -8,7 +8,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { EditIcon, PlusCircle, Trash } from "lucide-react";
+import { EditIcon, Trash } from "lucide-react";
+import AddTourTypeModal from "@/components/modules/Admin/TourType/AddTourTypeModal";
 
 const TourTypes = () => {
   const { data } = useGetTourTypesQuery(undefined);
@@ -16,9 +17,7 @@ const TourTypes = () => {
     <div className="w-full max-w-5xl mx-auto">
       <div className="flex justify-between mb-6 items-center">
         <h1 className="text-3xl font-bold">Tour Types</h1>
-        <Button className="text-white cursor-pointer">
-          <PlusCircle /> Add Tour Type
-        </Button>
+        <AddTourTypeModal />
       </div>
       <div className="border border-muted round-md p-4">
         <Table>
