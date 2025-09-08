@@ -1,10 +1,9 @@
-
 const Tours = () => {
-    return (
-        <div>
-            This is Tours Page
-        </div>
-    );
+  return (
+    <div>
+      <h1>This is Admin Tours Page</h1>
+    </div>
+  );
 };
 
 export default Tours;

@@ -1,3 +1,4 @@
+import Divisions from "@/pages/Admin/Divisions";
 import type { ISidebarItem } from "@/types";
 import { lazy } from "react";
 const Analytics = lazy(() => import("@/pages/Admin/Analytics"));
@@ -27,6 +28,11 @@ export const adminSidebarItems: ISidebarItem[] = [
         title: "Tours",
         url: "/admin/tours",
         component: Tours,
+      },
+      {
+        title: "Divisions",
+        url: "/admin/divisions",
+        component: Divisions,
       },
     ],
   },

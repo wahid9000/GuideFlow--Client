@@ -47,10 +47,11 @@ const LoginForm = () => {
       email: data.email,
       password: data.password,
     };
+    const toastId = toast.loading("Please wait...");
     try {
       const result = await login(authInfo).unwrap();
       if (result) {
-        toast.success("User logged In successfully");
+        toast.success("User logged In successfully", { id: toastId });
         navigate("/");
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
