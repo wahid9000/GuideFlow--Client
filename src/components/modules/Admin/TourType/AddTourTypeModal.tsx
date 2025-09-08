@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import { useCreateTourTypeMutation } from "@/redux/features/tour/tour.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusCircle } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
@@ -35,6 +36,7 @@ const createSchema = z.object({
 });
 
 const AddTourTypeModal = () => {
+  const [open, setOpen] = useState(false);
   const [createTourType, { isLoading }] = useCreateTourTypeMutation();
   const form = useForm<z.infer<typeof createSchema>>({
     resolver: zodResolver(createSchema),
@@ -44,14 +46,22 @@ const AddTourTypeModal = () => {
   });
 
   const onSubmit = async (values: { name: string }) => {
-    const res = await createTourType({ name: values.name }).unwrap();
-    if (res.success) {
-      toast.success("Tour Type added successfully");
+    const toastId = toast.loading("Adding...");
+    try {
+      const res = await createTourType({ name: values.name }).unwrap();
+      if (res.success) {
+        toast.success("Tour Type added successfully", { id: toastId });
+        setOpen(false);
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.data?.message, { id: toastId });
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="text-white cursor-pointer">
           <PlusCircle /> Add Tour Type
@@ -97,7 +107,7 @@ const AddTourTypeModal = () => {
             form="addTourType"
             className="cursor-pointer text-white"
           >
-            {isLoading ? "Saving..." : "Save Changes"}
+            {isLoading ? "Adding..." : "Add"}
           </Button>
         </DialogFooter>
       </DialogContent>

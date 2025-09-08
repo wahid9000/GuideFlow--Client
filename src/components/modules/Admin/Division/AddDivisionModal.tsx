@@ -1,3 +1,4 @@
+import SingleImageUploader from "@/components/SingleImageUploader";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -18,9 +19,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useCreateDivisionMutation } from "@/redux/features/division/division.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusCircle } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 
 const divisionCreateSchema = z.object({
@@ -28,11 +32,13 @@ const divisionCreateSchema = z.object({
   description: z
     .string()
     .min(5, { error: "Description is too short" })
-    .max(70, { error: "Description is too long" }),
+    .max(150, { error: "Description is too long" }),
 });
-const isLoading = false;
 
 const AddDivisionModal = () => {
+  const [open, setOpen] = useState(false);
+  const [createDivision, { isLoading }] = useCreateDivisionMutation();
+  const [image, setImage] = useState<File | null>(null);
   const form = useForm<z.infer<typeof divisionCreateSchema>>({
     resolver: zodResolver(divisionCreateSchema),
     defaultValues: {
@@ -41,12 +47,28 @@ const AddDivisionModal = () => {
     },
   });
 
-  const onSubmit = async (values) => {
-    console.log(values);
+  const onSubmit = async (data: { name: string; description: string }) => {
+    const formData = new FormData();
+
+    formData.append("data", JSON.stringify(data));
+    formData.append("file", image as File);
+
+    const toastId = toast.loading("Adding...");
+    try {
+      const res = await createDivision(formData).unwrap();
+      if (res.success) {
+        toast.success("Division added successfully", { id: toastId });
+        setOpen(false);
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.data?.message, { id: toastId });
+    }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="text-white cursor-pointer">
           <PlusCircle /> Add Division
@@ -93,6 +115,8 @@ const AddDivisionModal = () => {
               )}
             />
           </form>
+
+          <SingleImageUploader setImage={setImage} />
         </Form>
         <DialogFooter>
           <DialogClose asChild>
@@ -106,7 +130,7 @@ const AddDivisionModal = () => {
             form="addTourType"
             className="cursor-pointer text-white"
           >
-            {isLoading ? "Saving..." : "Save Changes"}
+            {isLoading ? "Adding..." : "Add"}
           </Button>
         </DialogFooter>
       </DialogContent>
