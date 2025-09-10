@@ -1,5 +1,8 @@
 import AddDivisionModal from "@/components/modules/Admin/Division/AddDivisionModal";
-import { useGetDivisionsQuery } from "@/redux/features/division/division.api";
+import {
+  useDeleteDivisionMutation,
+  useGetDivisionsQuery,
+} from "@/redux/features/division/division.api";
 import {
   Table,
   TableBody,
@@ -21,12 +24,19 @@ import {
 
 const Divisions = () => {
   const { data } = useGetDivisionsQuery(undefined);
+  const [deleteDivision] = useDeleteDivisionMutation();
 
   const handleDeleteDivision = async (divisionId: string) => {
     const toastId = toast.loading("Deleting...");
     try {
-    } catch (error) {
+      const res = await deleteDivision(divisionId).unwrap();
+      if (res.success) {
+        toast.success("Division Deleted Successfully", { id: toastId });
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       console.log(error);
+      toast.error(error?.data?.message, { id: toastId });
     }
   };
   return (

@@ -27,8 +27,10 @@ const TourTypes = () => {
       if (res.success) {
         toast.success("Tour Type Deleted Successfully", { id: toastId });
       }
-    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       console.log(error);
+      toast.error(error?.data?.message, { id: toastId });
     }
   };
   return (
