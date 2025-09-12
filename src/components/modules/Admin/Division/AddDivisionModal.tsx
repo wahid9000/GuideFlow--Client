@@ -76,7 +76,7 @@ const AddDivisionModal = () => {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader className=" mb-4">
-          <DialogTitle>Add Tour Type</DialogTitle>
+          <DialogTitle>Add Division</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
@@ -93,7 +93,7 @@ const AddDivisionModal = () => {
                     <Input placeholder="Name*" {...field} />
                   </FormControl>
                   <FormDescription className="sr-only">
-                    This is your tour type name.
+                    This is your division name.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -108,7 +108,7 @@ const AddDivisionModal = () => {
                     <Textarea placeholder="Description*" {...field} />
                   </FormControl>
                   <FormDescription className="sr-only">
-                    This is your tour type name.
+                    This is your description name.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

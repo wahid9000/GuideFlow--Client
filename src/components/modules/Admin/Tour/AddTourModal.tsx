@@ -35,12 +35,18 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { useGetDivisionsQuery } from "@/redux/features/division/division.api";
-import { useGetTourTypesQuery } from "@/redux/features/tour/tour.api";
+import {
+  useCreateTourMutation,
+  useGetTourTypesQuery,
+} from "@/redux/features/tour/tour.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon, PlusCircle } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type FieldValues, type SubmitHandler } from "react-hook-form";
 import z from "zod";
+import MultipleImageUploader from "@/components/MultipleImageUploader";
+import { toast } from "sonner";
+import type { FileMetadata } from "@/hooks/use-file-upload";
 
 const createSchema = z.object({
   title: z
@@ -57,12 +63,14 @@ const createSchema = z.object({
       error: "Description is too short",
     })
     .max(150, { error: "Description is too long" }),
-  startDate: z.date({error: "Start Date is required"}),
-  endDate: z.date({error: "End Date is required"}),
+  startDate: z.date({ error: "Start Date is required" }),
+  endDate: z.date({ error: "End Date is required" }),
 });
 
 const AddTourModal = () => {
   const [open, setOpen] = useState(false);
+  const [images, setImages] = useState<(File | FileMetadata)[] | []>([]);
+  const [createTour] = useCreateTourMutation();
   const { data: tourTypeData, isLoading: tourTypeLoading } =
     useGetTourTypesQuery(undefined);
   const { data: divisionData, isLoading: divisionLoading } =
@@ -80,13 +88,29 @@ const AddTourModal = () => {
     },
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    const toastId = toast.loading("Adding Tour...");
     const tourData = {
       ...data,
       startDate: formatISO(data.startDate),
       endDate: formatISO(data.endDate),
     };
-    console.log("🚀 ~ onSubmit ~ tourData:", tourData);
+
+    const formData = new FormData();
+
+    formData.append("data", JSON.stringify(tourData));
+    images.forEach((image) => formData.append("files", image as File));
+
+    try {
+      const res = await createTour(formData).unwrap();
+      if (res) {
+        toast.success("Tour added successfully", { id: toastId });
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.data?.message, { id: toastId });
+    }
   };
 
   return (
@@ -96,7 +120,7 @@ const AddTourModal = () => {
           <PlusCircle /> Add Tour
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[700px]">
+      <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="mb-2">Add New Tour</DialogTitle>
         </DialogHeader>
@@ -285,26 +309,32 @@ const AddTourModal = () => {
                 )}
               />
             </div>
+            <div className="flex gap-5 items-stretch">
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem className="flex-1 w-full">
+                    <FormLabel>Description</FormLabel>
 
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Textarea
-                      className="min-h-[150px] text-base"
-                      placeholder="Description*"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription className="sr-only">
-                    This is your description.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <FormControl>
+                      <Textarea
+                        className="h-[200px] text-base"
+                        placeholder="Description*"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription className="sr-only">
+                      This is your description.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="flex-1 mt-5">
+                <MultipleImageUploader setImages={setImages} />
+              </div>
+            </div>
           </form>
         </Form>
         <DialogFooter>
