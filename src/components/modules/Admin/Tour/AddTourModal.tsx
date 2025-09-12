@@ -40,13 +40,29 @@ import {
   useGetTourTypesQuery,
 } from "@/redux/features/tour/tour.api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarIcon, PlusCircle } from "lucide-react";
+import {
+  CalendarIcon,
+  ListChecks,
+  PlusCircle,
+  PlusCircleIcon,
+  Trash2,
+} from "lucide-react";
 import { useState } from "react";
-import { useForm, type FieldValues, type SubmitHandler } from "react-hook-form";
+import {
+  useFieldArray,
+  useForm,
+  type FieldValues,
+  type SubmitHandler,
+} from "react-hook-form";
 import z from "zod";
 import MultipleImageUploader from "@/components/MultipleImageUploader";
 import { toast } from "sonner";
 import type { FileMetadata } from "@/hooks/use-file-upload";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const createSchema = z.object({
   title: z
@@ -65,6 +81,34 @@ const createSchema = z.object({
     .max(150, { error: "Description is too long" }),
   startDate: z.date({ error: "Start Date is required" }),
   endDate: z.date({ error: "End Date is required" }),
+  included: z
+    .array(
+      z.object({
+        value: z.string().optional(),
+      })
+    )
+    .optional(),
+  excluded: z
+    .array(
+      z.object({
+        value: z.string().optional(),
+      })
+    )
+    .optional(),
+  amenities: z
+    .array(
+      z.object({
+        value: z.string().optional(),
+      })
+    )
+    .optional(),
+  tourPlan: z
+    .array(
+      z.object({
+        value: z.string().optional(),
+      })
+    )
+    .optional(),
 });
 
 const AddTourModal = () => {
@@ -85,7 +129,47 @@ const AddTourModal = () => {
       description: "",
       startDate: undefined,
       endDate: undefined,
+      included: [{ value: "" }],
+      excluded: [{ value: "" }],
+      amenities: [{ value: "" }],
+      tourPlan: [{ value: "" }],
     },
+  });
+
+  const {
+    fields: includedFields,
+    append: includedAppend,
+    remove: includedRemove,
+  } = useFieldArray({
+    control: form.control,
+    name: "included",
+  });
+
+  const {
+    fields: excludedFields,
+    append: excludedAppend,
+    remove: excludedRemove,
+  } = useFieldArray({
+    control: form.control,
+    name: "excluded",
+  });
+
+  const {
+    fields: amenitiesFields,
+    append: amenitiesAppend,
+    remove: amenitiesRemove,
+  } = useFieldArray({
+    control: form.control,
+    name: "amenities",
+  });
+
+  const {
+    fields: tourPlanFields,
+    append: tourPlanAppend,
+    remove: tourPlanRemove,
+  } = useFieldArray({
+    control: form.control,
+    name: "tourPlan",
   });
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
@@ -94,23 +178,24 @@ const AddTourModal = () => {
       ...data,
       startDate: formatISO(data.startDate),
       endDate: formatISO(data.endDate),
+      included: data.included.map((item: { value: string }) => item.value),
     };
+    console.log("🚀 ~ onSubmit ~ tourData:", tourData);
 
     const formData = new FormData();
 
     formData.append("data", JSON.stringify(tourData));
     images.forEach((image) => formData.append("files", image as File));
-
-    try {
-      const res = await createTour(formData).unwrap();
-      if (res) {
-        toast.success("Tour added successfully", { id: toastId });
-      }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      console.log(error);
-      toast.error(error?.data?.message, { id: toastId });
-    }
+    // try {
+    //   const res = await createTour(formData).unwrap();
+    //   if (res) {
+    //     toast.success("Tour added successfully", { id: toastId });
+    //   }
+    //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // } catch (error: any) {
+    //   console.log(error);
+    //   toast.error(error?.data?.message, { id: toastId });
+    // }
   };
 
   return (
@@ -335,6 +420,261 @@ const AddTourModal = () => {
                 <MultipleImageUploader setImages={setImages} />
               </div>
             </div>
+
+            <div className="border-t border-muted w-full"></div>
+
+            <>
+              <div className="flex items-center justify-between gap-1">
+                <div className="flex items-center gap-2">
+                  <ListChecks className="w-5 h-5 text-primary" />
+                  <FormLabel className="text-lg font-semibold">
+                    Items Included in the Tour ( add anything provided )
+                  </FormLabel>
+                </div>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="cursor-pointer"
+                      onClick={() => includedAppend({ value: "" })}
+                    >
+                      <PlusCircleIcon className="text-white" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent className="text-white bg-gray-950">
+                    Add More
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+
+              <div className="space-y-4 mt-4">
+                {includedFields.map((item, index) => (
+                  <div className="w-full flex gap-2 items-center">
+                    <FormField
+                      control={form.control}
+                      name={`included.${index}.value`}
+                      key={item.id}
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormControl>
+                            <Input
+                              placeholder="e.g. Free breakfast, Hotel pickup.."
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription className="sr-only">
+                            Enter an item included in the tour.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <Button
+                      onClick={() => includedRemove(index)}
+                      size="icon"
+                      type="button"
+                      variant="destructive"
+                      className="cursor-pointer"
+                    >
+                      <Trash2 />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </>
+
+            <>
+              <div className="flex items-center justify-between gap-1">
+                <div className="flex items-center gap-2">
+                  <ListChecks className="w-5 h-5 text-primary" />
+                  <FormLabel className="text-lg font-semibold">
+                    Items Excluded in the Tour ( add anything won't be provided
+                    )
+                  </FormLabel>
+                </div>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="cursor-pointer"
+                      onClick={() => excludedAppend({ value: "" })}
+                    >
+                      <PlusCircleIcon className="text-white" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent className="text-white bg-gray-950">
+                    Add More
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+
+              <div className="space-y-4 mt-4">
+                {excludedFields.map((item, index) => (
+                  <div className="w-full flex gap-2 items-center">
+                    <FormField
+                      control={form.control}
+                      name={`excluded.${index}.value`}
+                      key={item.id}
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormControl>
+                            <Input
+                              placeholder="e.g. Personal cost, Evening Snacks.."
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription className="sr-only">
+                            Enter an item excluded in the tour.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <Button
+                      onClick={() => excludedRemove(index)}
+                      size="icon"
+                      type="button"
+                      variant="destructive"
+                      className="cursor-pointer"
+                    >
+                      <Trash2 />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </>
+
+            <>
+              <div className="flex items-center justify-between gap-1">
+                <div className="flex items-center gap-2">
+                  <ListChecks className="w-5 h-5 text-primary" />
+                  <FormLabel className="text-lg font-semibold">
+                    Amenities in the Tour ( add anything as amenities )
+                  </FormLabel>
+                </div>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="cursor-pointer"
+                      onClick={() => amenitiesAppend({ value: "" })}
+                    >
+                      <PlusCircleIcon className="text-white" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent className="text-white bg-gray-950">
+                    Add More
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+
+              <div className="space-y-4 mt-4">
+                {amenitiesFields.map((item, index) => (
+                  <div className="w-full flex gap-2 items-center">
+                    <FormField
+                      control={form.control}
+                      name={`amenities.${index}.value`}
+                      key={item.id}
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormControl>
+                            <Input
+                              placeholder="e.g. Insurance & Safety, Comfort Facilities..."
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription className="sr-only">
+                            Enter amenities in the tour.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <Button
+                      onClick={() => amenitiesRemove(index)}
+                      size="icon"
+                      type="button"
+                      variant="destructive"
+                      className="cursor-pointer"
+                    >
+                      <Trash2 />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </>
+
+            <>
+              <div className="flex items-center justify-between gap-1">
+                <div className="flex items-center gap-2">
+                  <ListChecks className="w-5 h-5 text-primary" />
+                  <FormLabel className="text-lg font-semibold">
+                    Tour Plan (add day-by-day activities or itinerary details)
+                  </FormLabel>
+                </div>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="cursor-pointer"
+                      onClick={() => tourPlanAppend({ value: "" })}
+                    >
+                      <PlusCircleIcon className="text-white" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent className="text-white bg-gray-950">
+                    Add More
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+
+              <div className="space-y-4 mt-4">
+                {tourPlanFields.map((item, index) => (
+                  <div className="w-full flex gap-2 items-center">
+                    <FormField
+                      control={form.control}
+                      name={`tourPlan.${index}.value`}
+                      key={item.id}
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormControl>
+                            <Input
+                              placeholder="e.g. Day 1 – City tour & welcome dinner; Day 2 – Beach visit & snorkeling…"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription className="sr-only">
+                            Enter tour plan in the tour.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <Button
+                      onClick={() => tourPlanRemove(index)}
+                      size="icon"
+                      type="button"
+                      variant="destructive"
+                      className="cursor-pointer"
+                    >
+                      <Trash2 />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </>
           </form>
         </Form>
         <DialogFooter>
