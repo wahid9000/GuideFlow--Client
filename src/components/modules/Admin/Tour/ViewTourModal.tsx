@@ -2,9 +2,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -18,7 +16,7 @@ import {
 } from "@/components/ui/carousel";
 import { Separator } from "@/components/ui/separator";
 import type { ITour } from "@/types/tour.type";
-import { ViewIcon, X } from "lucide-react";
+import { Eye } from "lucide-react";
 import { useState } from "react";
 
 const ViewTourModal = ({ tour }: { tour: ITour }) => {
@@ -28,7 +26,7 @@ const ViewTourModal = ({ tour }: { tour: ITour }) => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" className="cursor-pointer">
-          <ViewIcon />
+          <Eye />
         </Button>
       </DialogTrigger>
 
@@ -66,7 +64,7 @@ const ViewTourModal = ({ tour }: { tour: ITour }) => {
 
         <Separator className="my-6" />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <h3 className="text-lg font-semibold mb-2">Start Date :</h3>
             <p className="text-foreground">
@@ -80,6 +78,40 @@ const ViewTourModal = ({ tour }: { tour: ITour }) => {
             <p className="text-foreground">
               {new Date(tour.endDate).toLocaleString()}
             </p>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold mb-1">Location</h3>
+            <p className="text-foreground">{tour.location ?? "N/A"}</p>
+          </div>
+        </div>
+
+        <Separator className="my-6" />
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <h3 className="text-lg font-semibold mb-1">Cost</h3>
+            <p className="text-foreground">€{tour.costFrom ?? "N/A"}</p>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-1">Min Age</h3>
+            <p className="text-foreground">{tour.minAge ?? "N/A"}</p>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-1">Max Guests</h3>
+            <p className="text-foreground">{tour.maxGuest ?? "N/A"}</p>
+          </div>
+        </div>
+        <Separator className="my-6" />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <h3 className="text-lg font-semibold mb-1">Arrival Location</h3>
+            <p className="text-foreground">{tour.arrivalLocation ?? "N/A"}</p>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-1">Departure Location</h3>
+            <p className="text-foreground">{tour.departureLocation ?? "N/A"}</p>
           </div>
         </div>
 

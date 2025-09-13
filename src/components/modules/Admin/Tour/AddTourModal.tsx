@@ -65,22 +65,26 @@ import {
 } from "@/components/ui/tooltip";
 
 const createSchema = z.object({
-  title: z
-    .string({ error: "Tour name must be string" })
-    .min(3, {
-      error: "Tour name is too short",
-    })
-    .max(30, { error: "Tour name is too long" }),
+  title: z.string({ error: "Tour name must be string" }).min(3, {
+    error: "Tour name is too short",
+  }),
+
   division: z.string({ error: "Division must be string" }),
   tourType: z.string({ error: "Tour Type must be string" }),
-  description: z
-    .string({ error: "Description must be string" })
-    .min(5, {
-      error: "Description is too short",
-    })
-    .max(150, { error: "Description is too long" }),
+  description: z.string({ error: "Description must be string" }).min(5, {
+    error: "Description is too short",
+  }),
+
   startDate: z.date({ error: "Start Date is required" }),
   endDate: z.date({ error: "End Date is required" }),
+
+  location: z.string({ error: "location must be string" }),
+  costFrom: z.string({ error: "Cost must be string" }),
+  departureLocation: z.string({ error: "Departure Location must be string" }),
+  arrivalLocation: z.string({ error: "Arrival Location must be string" }),
+  maxGuest: z.string({ error: "Maximum guest must be a string" }),
+  minAge: z.string({ error: "Minumim age must be a string" }),
+
   included: z
     .array(
       z.object({
@@ -129,6 +133,12 @@ const AddTourModal = () => {
       description: "",
       startDate: undefined,
       endDate: undefined,
+      location: "",
+      costFrom: "",
+      arrivalLocation: "",
+      departureLocation: "",
+      maxGuest: "",
+      minAge: "",
       included: [{ value: "" }],
       excluded: [{ value: "" }],
       amenities: [{ value: "" }],
@@ -176,6 +186,9 @@ const AddTourModal = () => {
     const toastId = toast.loading("Adding Tour...");
     const tourData = {
       ...data,
+      costFrom: Number(data.costFrom),
+      maxGuest: Number(data.maxGuest),
+      minAge: Number(data.minAge),
       startDate: formatISO(data.startDate),
       endDate: formatISO(data.endDate),
       included: data.included.map((item: { value: string }) => item.value),
@@ -224,7 +237,7 @@ const AddTourModal = () => {
                 <FormItem>
                   <FormLabel>Tour Title</FormLabel>
                   <FormControl>
-                    <Input placeholder="Tour Type Name*" {...field} />
+                    <Input placeholder="Tour Name*" {...field} />
                   </FormControl>
                   <FormDescription className="sr-only">
                     This is your tour title.
@@ -236,11 +249,77 @@ const AddTourModal = () => {
             <div className="flex gap-5">
               <FormField
                 control={form.control}
+                name="location"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Location</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Location Name*" {...field} />
+                    </FormControl>
+                    <FormDescription className="sr-only">
+                      This is your location name.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="costFrom"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Cost</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Cost*" {...field} />
+                    </FormControl>
+                    <FormDescription className="sr-only">
+                      This is the cost.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex gap-5">
+              <FormField
+                control={form.control}
+                name="departureLocation"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Departure Location</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Departure Location*" {...field} />
+                    </FormControl>
+                    <FormDescription className="sr-only">
+                      This is your departure location.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="arrivalLocation"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Arrival Location</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Departure Location*" {...field} />
+                    </FormControl>
+                    <FormDescription className="sr-only">
+                      This is the arrival location.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="flex gap-5">
+              <FormField
+                control={form.control}
                 name="division"
                 render={({ field }) => (
                   <FormItem className="flex-1 w-full">
-                    {" "}
-                    {/* full width */}
                     <FormLabel>Division</FormLabel>
                     <Select
                       disabled={divisionLoading}
@@ -249,9 +328,7 @@ const AddTourModal = () => {
                     >
                       <FormControl>
                         <SelectTrigger className="w-full">
-                          {" "}
-                          {/* full width select */}
-                          <SelectValue placeholder="Select a division" />
+                          <SelectValue placeholder="Select a division*" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -274,8 +351,6 @@ const AddTourModal = () => {
                 name="tourType"
                 render={({ field }) => (
                   <FormItem className="flex-1 w-full">
-                    {" "}
-                    {/* full width */}
                     <FormLabel>Tour Type</FormLabel>
                     <Select
                       disabled={tourTypeLoading}
@@ -284,9 +359,7 @@ const AddTourModal = () => {
                     >
                       <FormControl>
                         <SelectTrigger className="w-full">
-                          {" "}
-                          {/* full width select */}
-                          <SelectValue placeholder="Select a TourType" />
+                          <SelectValue placeholder="Select a TourType*" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -304,7 +377,40 @@ const AddTourModal = () => {
                 )}
               />
             </div>
-
+            <div className="flex gap-5">
+              <FormField
+                control={form.control}
+                name="maxGuest"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Maximum Guest Allowed</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Max Guest*" {...field} />
+                    </FormControl>
+                    <FormDescription className="sr-only">
+                      This is your max guest.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="minAge"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Minimum Age Required</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Minimum Age*" {...field} />
+                    </FormControl>
+                    <FormDescription className="sr-only">
+                      This is the min age.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             <div className="flex gap-5 items-center">
               <FormField
                 control={form.control}
@@ -325,7 +431,7 @@ const AddTourModal = () => {
                             {field.value ? (
                               format(field.value, "PPP")
                             ) : (
-                              <span>Pick a date</span>
+                              <span>Pick A Start Date*</span>
                             )}
                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                           </Button>
@@ -370,7 +476,7 @@ const AddTourModal = () => {
                             {field.value ? (
                               format(field.value, "PPP")
                             ) : (
-                              <span>Pick a date</span>
+                              <span>Pick An End Date*</span>
                             )}
                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                           </Button>

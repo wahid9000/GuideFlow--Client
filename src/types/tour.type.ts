@@ -10,9 +10,15 @@ export interface ITour {
   excluded: string[];
   images: string[];
   tourPlan: string[];
-  startDate: string; 
-  endDate: string;   
-  createdAt: string;  
-  updatedAt: string;  
+  startDate: string; // ISO string
+  endDate: string; // ISO string
+  minAge?: number;
+  maxGuest?: number;
+  arrivalLocation?: string;
+  departureLocation?: string;
+  costFrom?: string;
+  location?: string;
+  createdAt: string;
+  updatedAt: string;
   __v: number;
 }
