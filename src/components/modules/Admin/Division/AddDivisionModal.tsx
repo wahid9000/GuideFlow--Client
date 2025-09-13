@@ -74,7 +74,7 @@ const AddDivisionModal = () => {
           <PlusCircle /> Add Division
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] overflow-y-auto scrollbar-hide">
         <DialogHeader className=" mb-4">
           <DialogTitle>Add Division</DialogTitle>
         </DialogHeader>

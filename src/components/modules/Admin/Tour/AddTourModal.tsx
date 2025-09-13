@@ -179,23 +179,25 @@ const AddTourModal = () => {
       startDate: formatISO(data.startDate),
       endDate: formatISO(data.endDate),
       included: data.included.map((item: { value: string }) => item.value),
+      excluded: data.excluded.map((item: { value: string }) => item.value),
+      amenities: data.amenities.map((item: { value: string }) => item.value),
+      tourPlan: data.tourPlan.map((item: { value: string }) => item.value),
     };
-    console.log("🚀 ~ onSubmit ~ tourData:", tourData);
-
     const formData = new FormData();
 
     formData.append("data", JSON.stringify(tourData));
     images.forEach((image) => formData.append("files", image as File));
-    // try {
-    //   const res = await createTour(formData).unwrap();
-    //   if (res) {
-    //     toast.success("Tour added successfully", { id: toastId });
-    //   }
-    //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    // } catch (error: any) {
-    //   console.log(error);
-    //   toast.error(error?.data?.message, { id: toastId });
-    // }
+    try {
+      const res = await createTour(formData).unwrap();
+      if (res) {
+        toast.success("Tour added successfully", { id: toastId });
+        setOpen(false);
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.data?.message, { id: toastId });
+    }
   };
 
   return (
@@ -205,7 +207,7 @@ const AddTourModal = () => {
           <PlusCircle /> Add Tour
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto scrollbar-hide">
         <DialogHeader>
           <DialogTitle className="mb-2">Add New Tour</DialogTitle>
         </DialogHeader>
@@ -461,7 +463,7 @@ const AddTourModal = () => {
                         <FormItem className="flex-1">
                           <FormControl>
                             <Input
-                              placeholder="e.g. Free breakfast, Hotel pickup.."
+                              placeholder="e.g. Free breakfast, Vehicle cost.."
                               {...field}
                             />
                           </FormControl>

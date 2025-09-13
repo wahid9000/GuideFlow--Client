@@ -67,7 +67,7 @@ const AddTourTypeModal = () => {
           <PlusCircle /> Add Tour Type
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] overflow-y-auto scrollbar-hide">
         <DialogHeader>
           <DialogTitle>Add Tour Type</DialogTitle>
         </DialogHeader>
