@@ -20,5 +20,4 @@ export interface ITour {
   location?: string;
   createdAt: string;
   updatedAt: string;
-  __v: number;
 }

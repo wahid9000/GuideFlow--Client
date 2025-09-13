@@ -15,9 +15,9 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Separator } from "@/components/ui/separator";
-import type { ITour } from "@/types/tour.type";
 import { Eye } from "lucide-react";
 import { useState } from "react";
+import type { ITour } from "@/types";
 
 const ViewTourModal = ({ tour }: { tour: ITour }) => {
   const [open, setOpen] = useState(false);

@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { EditIcon, Trash, ViewIcon } from "lucide-react";
+import { EditIcon, Trash } from "lucide-react";
 import { toast } from "sonner";
 import DeleteConfirmation from "@/components/DeleteConfirmation";
 import {
@@ -22,12 +22,12 @@ import {
   useGetToursQuery,
 } from "@/redux/features/tour/tour.api";
 import ViewTourModal from "@/components/modules/Admin/Tour/ViewTourModal";
-import type { ITour } from "@/types/tour.type";
+import type { ITour } from "@/types";
 
 const Tours = () => {
   const { data: tourData } = useGetToursQuery(undefined);
-  const data = tourData?.data;
-  const meta = tourData?.meta;
+  const data = tourData;
+  // const meta = tourData?.meta;
 
   const [deletTour] = useDeleteTourMutation();
   const handleDeleteTour = async (tourId: string) => {
