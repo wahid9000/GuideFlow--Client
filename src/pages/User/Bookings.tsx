@@ -15,11 +15,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { BookingSkeleton } from "@/components/skeletons/BookingSkeleton";
 import { useEffect, useState } from "react";
+import { useCreateBookingMutation } from "@/redux/features/booking/booking.api";
+import { toast } from "sonner";
 
 const Bookings = () => {
   const { slug } = useParams();
   const { data, isLoading, isError } = useGetSingleTourQuery(slug);
   const tour = data ?? ({} as ITour);
+  const [createBooking, { isLoading: bookingLoading }] =
+    useCreateBookingMutation();
   const [guestCount, setGuestCount] = useState(1);
   const [totalAmount, setTotalAmount] = useState(0);
 
@@ -50,7 +54,30 @@ const Bookings = () => {
   };
 
   const handleBooking = async () => {
-    console.log(guestCount);
+    const toastId = toast.loading("Please wait...");
+    let bookingData;
+    if (data) {
+      bookingData = {
+        tour: tour._id,
+        guestCount: guestCount,
+      };
+      console.log("🚀 ~ handleBooking ~ bookingData:", bookingData);
+    }
+
+    try {
+      const res = await createBooking(bookingData).unwrap();
+      console.log("🚀 ~ handleBooking ~ res:", res);
+      if (res.success) {
+        toast.success("Booking created successfully", { id: toastId });
+        if(res.data.paymentUrl) {
+          window.open(res.data.paymentUrl)
+        }
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.data?.message, { id: toastId });
+    }
   };
 
   return (
@@ -154,9 +181,9 @@ const Bookings = () => {
         {/* Sidebar Column (Booking Card) */}
         <div className="md:col-span-1 order-first md:order-last">
           <div className="md:sticky md:top-20 md:mt-24">
-            <div className="border border-blue-300 p-8 rounded-2xl shadow-lg bg-white">
+            <div className="border border-blue-300 p-8 rounded-2xl shadow-lg">
               <div className="flex flex-col gap-2 mb-6">
-                <h3 className="text-3xl font-extrabold text-gray-900">
+                <h3 className="text-3xl font-extrabold text-foreground">
                   Booking Summary
                 </h3>
               </div>
@@ -164,34 +191,34 @@ const Bookings = () => {
               {/* Price per person and guest count */}
               <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-gray-700">
+                  <span className="font-semibold text-foreground">
                     Price per Person:
                   </span>
-                  <div className="font-bold text-lg text-blue-600">
+                  <div className="font-bold text-lg text-foreground">
                     ${tour.costFrom}
                   </div>
                 </div>
 
                 {/* Guests counter */}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-gray-700">Guests:</span>
+                  <span className="font-semibold text-foreground">Guests:</span>
                   <div className="flex items-center gap-3">
                     <Button
                       variant="outline"
                       size="icon"
-                      className="h-8 w-8 rounded-full border-blue-600 text-blue-600 hover:bg-blue-100"
+                      className="h-8 w-8 rounded-full border-blue-600 text-foreground hover:bg-blue-100"
                       onClick={() => decrementGuest()}
                       disabled={guestCount <= 1}
                     >
                       <MinusCircle className="h-4 w-4" />
                     </Button>
-                    <span className="text-lg font-bold text-gray-900">
+                    <span className="text-lg font-bold text-foreground">
                       {guestCount}
                     </span>
                     <Button
                       variant="outline"
                       size="icon"
-                      className="h-8 w-8 rounded-full border-blue-600 text-blue-600 hover:bg-blue-100"
+                      className="h-8 w-8 rounded-full border-blue-600 text-foreground hover:bg-blue-100"
                       onClick={() => incrementGuest()}
                       disabled={guestCount >= tour!.maxGuest}
                     >
@@ -202,8 +229,10 @@ const Bookings = () => {
 
                 {/* Booking duration */}
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-gray-700">Duration:</span>
-                  <div className="flex items-center gap-2 text-gray-700">
+                  <span className="font-semibold text-foreground">
+                    Duration:
+                  </span>
+                  <div className="flex items-center gap-2 text-foreground">
                     <Calendar className="h-4 w-4" />
                     <p className="font-medium text-sm">
                       {new Date(tour.startDate).toLocaleDateString()} to{" "}
@@ -217,17 +246,20 @@ const Bookings = () => {
 
               {/* Total amount section */}
               <div className="flex justify-between items-center mb-6">
-                <span className="text-xl font-bold text-gray-900">Total:</span>
-                <span className="text-3xl font-extrabold text-blue-600">
+                <span className="text-xl font-bold text-foreground">
+                  Total:
+                </span>
+                <span className="text-3xl font-extrabold text-foreground">
                   ${totalAmount}
                 </span>
               </div>
 
               <Button
                 onClick={handleBooking}
-                className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition shadow-lg"
+                disabled={bookingLoading}
+                className="w-full cursor-pointer bg-blue-950 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition shadow-lg"
               >
-                Book Now
+                {bookingLoading ? "Confirming..." : "Book Now"}
               </Button>
             </div>
           </div>

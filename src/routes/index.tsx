@@ -16,6 +16,8 @@ import Tours from "@/pages/User/Tours";
 import HomePage from "@/pages/User/HomePage";
 import TourDetails from "@/pages/User/TourDetails";
 import Bookings from "@/pages/User/Bookings";
+import Success from "@/pages/Payment/Success";
+import Failure from "@/pages/Payment/Failure";
 
 export const router = createBrowserRouter([
   {
@@ -75,5 +77,13 @@ export const router = createBrowserRouter([
   {
     path: "/unauthorized",
     Component: Unauthorized,
+  },
+  {
+    path: "/payment/success",
+    Component: Success,
+  },
+  {
+    path: "/payment/fail",
+    Component: Failure,
   },
 ]);

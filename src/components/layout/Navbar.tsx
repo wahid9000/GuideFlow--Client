@@ -125,11 +125,11 @@ export default function Navbar() {
                 <DropdownMenuTrigger asChild>
                   <Avatar>
                     <AvatarImage src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" />
-                    <AvatarFallback>CN</AvatarFallback>
+                    <AvatarFallback>image</AvatarFallback>
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56" align="start">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuLabel>Profile</DropdownMenuLabel>
                 </DropdownMenuContent>
               </DropdownMenu>
 
