@@ -36,12 +36,12 @@ export const tourApi = baseApi.injectEndpoints({
         providesTags: ["TOUR"],
         transformResponse: (response: IResponse<ITour[]>) => response.data,
       }),
-      getSingleTour: builder.query<ITour[], unknown>({
+      getSingleTour: builder.query<ITour, unknown>({
         query: (slug) => ({
           url: `/tour/${slug}`,
           method: "GET",
         }),
-        transformResponse: (response: IResponse<ITour[]>) => response.data,
+        transformResponse: (response: IResponse<ITour>) => response.data,
       }),
       deleteTourType: builder.mutation({
         query: (tourTypeId) => ({

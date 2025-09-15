@@ -21,6 +21,13 @@ import {
 import { toast } from "sonner";
 import { useAppDispatch } from "@/redux/hook";
 import { role } from "@/constants/role";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 const navigationLinks = [
   { href: "/", label: "Home", role: "PUBLIC" },
@@ -113,13 +120,27 @@ export default function Navbar() {
           <ModeToggle></ModeToggle>
 
           {userExists ? (
-            <Button
-              onClick={handleLogout}
-              variant={"outline"}
-              className="text-sm text-foreground cursor-pointer"
-            >
-              Logout
-            </Button>
+            <div className="flex items-center gap-2 cursor-pointer">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Avatar>
+                    <AvatarImage src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="start">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <Button
+                onClick={handleLogout}
+                variant={"outline"}
+                className="text-sm text-foreground cursor-pointer"
+              >
+                Logout
+              </Button>
+            </div>
           ) : (
             <Button asChild className="text-sm text-foreground cursor-pointer">
               <Link to="/login">Login</Link>

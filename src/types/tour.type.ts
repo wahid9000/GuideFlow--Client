@@ -13,10 +13,10 @@ export interface ITour {
   startDate: string; // ISO string
   endDate: string; // ISO string
   minAge?: number;
-  maxGuest?: number;
+  maxGuest: number;
   arrivalLocation?: string;
   departureLocation?: string;
-  costFrom?: string;
+  costFrom: number;
   location?: string;
   createdAt: string;
   updatedAt: string;
