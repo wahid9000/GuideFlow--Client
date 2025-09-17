@@ -1,5 +1,3 @@
-import { useGetToursQuery } from "@/redux/features/tour/tour.api";
-import Autoplay from "embla-carousel-autoplay";
 import {
   Card,
   CardContent,
@@ -14,19 +12,31 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { useGetToursQuery } from "@/redux/features/tour/tour.api";
+import Autoplay from "embla-carousel-autoplay";
 import { Button } from "@/components/ui/button";
 import type { ITour } from "@/types";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { Badge } from "@/components/ui/badge";
 import { TourCardSkeleton } from "@/components/skeletons/ToursCardSkeleton";
+import { ArrowBigRightIcon } from "lucide-react";
+import TourFilter from "@/components/modules/User/Tour/TourFilter";
 
 const Tours = () => {
-  const { data: tourData, isLoading } = useGetToursQuery(undefined);
+  const [searchParams] = useSearchParams();
+
+  const selectedDivision = searchParams.get("division") || undefined;
+  const selectedTourType = searchParams.get("tourType") || undefined;
+
+  const { data: tourData, isLoading } = useGetToursQuery({
+    division: selectedDivision,
+    tourType: selectedTourType,
+  });
   const tours: ITour[] = tourData || [];
-  // const meta = tourData?.meta;
 
   return (
     <>
+      {/* Banner */}
       <section className="relative w-full h-64">
         <img
           src="https://res.cloudinary.com/dungmnjyx/image/upload/v1757871187/sh6opioil9q-1757871184092-gettyimages-1432538580-avif.avif.avif"
@@ -36,19 +46,23 @@ const Tours = () => {
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="absolute inset-0 flex items-center justify-center">
           <h1 className="text-white text-4xl md:text-6xl font-extrabold">
-            {" "}
             Explore Amazing Tours
           </h1>
         </div>
       </section>
 
       <div className="px-4 py-8 container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {isLoading
-            ? Array.from({ length: 3 }).map((_, i) => (
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Filters Sidebar */}
+          <TourFilter />
+          {/* Tour Cards */}
+          <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {isLoading ? (
+              Array.from({ length: 3 }).map((_, i) => (
                 <TourCardSkeleton key={i} />
               ))
-            : tours.map((tour) => (
+            ) : tours.length > 0 ? (
+              tours.map((tour) => (
                 <Card
                   key={tour._id}
                   className="shadow-lg hover:shadow-xl transition-shadow rounded-xl"
@@ -100,48 +114,29 @@ const Tours = () => {
                     </CardHeader>
                   </Link>
 
-                  {/* Tour Info */}
                   <CardContent className="px-5 flex flex-col gap-2">
                     <CardTitle className="text-lg font-bold text-foreground">
                       {tour.title}
                     </CardTitle>
-                    {/* 
-              <p className="text-sm text-foreground line-clamp-3">
-                {tour.description}
-              </p> */}
 
                     <div className="flex justify-between items-center">
                       <p className="text-2xl font-extrabold text-foreground">
                         ${tour.costFrom}
                       </p>
-
                       <span className="text-sm text-foreground">
                         Max {tour.maxGuest} guests
                       </span>
                     </div>
 
-                    {/* <div className="grid grid-cols-2 gap-2 text-sm text-foreground mt-2">
-                <p>
-                  <span className="font-semibold">From:</span>{" "}
-                  {tour.departureLocation}
-                </p>
-                <p>
-                  <span className="font-semibold">To:</span>{" "}
-                  {tour.arrivalLocation}
-                </p>
-                <p>
-                  <span className="font-semibold">Duration:</span>{" "}
-                  {Math.ceil(
-                    (new Date(tour.endDate).getTime() -
-                      new Date(tour.startDate).getTime()) /
-                      (1000 * 60 * 60 * 24)
-                  )}{" "}
-                  days
-                </p>
-                <p>
-                  <span className="font-semibold">Min Age:</span> {tour.minAge}
-                </p>
-              </div> */}
+                    <div className="flex items-center justify-start text-sm">
+                      <p className="text-gray-700 mr-1">
+                        {tour.departureLocation}
+                      </p>
+                      <p className="mr-1">
+                        <ArrowBigRightIcon className="w-4 h-4 text-green-900" />
+                      </p>
+                      <p className="text-gray-700">{tour.arrivalLocation}</p>
+                    </div>
 
                     <div className="flex flex-wrap gap-2 mt-2">
                       {tour.included.slice(0, 2).map((item, index) => (
@@ -171,7 +166,13 @@ const Tours = () => {
                     </div>
                   </CardFooter>
                 </Card>
-              ))}
+              ))
+            ) : (
+              <h3 className="flex justify-center items-center text-xl font-bold">
+                No Tour Found
+              </h3>
+            )}
+          </div>
         </div>
       </div>
     </>

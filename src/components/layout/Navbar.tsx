@@ -142,7 +142,7 @@ export default function Navbar() {
               </Button>
             </div>
           ) : (
-            <Button asChild className="text-sm text-foreground cursor-pointer">
+            <Button asChild className="text-sm text-white cursor-pointer">
               <Link to="/login">Login</Link>
             </Button>
           )}
