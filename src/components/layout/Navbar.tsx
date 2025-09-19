@@ -6,6 +6,7 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
+
 import {
   Popover,
   PopoverContent,
@@ -28,6 +29,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+import SearchSection from "../modules/Navbar/SearchSection";
 
 const navigationLinks = [
   { href: "/", label: "Home", role: "PUBLIC" },
@@ -40,6 +42,7 @@ const navigationLinks = [
 
 export default function Navbar() {
   const { data } = useUserInfoQuery(undefined);
+
   const userExists = data?.data?.email;
   const [logout] = useLogoutMutation();
   const dispatch = useAppDispatch();
@@ -115,8 +118,10 @@ export default function Navbar() {
             </NavigationMenu>
           </div>
         </div>
+
         {/* Right side */}
         <div className="flex items-center gap-2">
+          <SearchSection />
           <ModeToggle></ModeToggle>
 
           {userExists ? (
