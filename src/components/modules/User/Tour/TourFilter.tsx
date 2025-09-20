@@ -20,9 +20,9 @@ const TourFilter = () => {
   const selectedTourType = searchParams.get("tourType") || undefined;
 
   const { data: divisionData, isLoading: divisionLoading } =
-    useGetDivisionsQuery(undefined);
+    useGetDivisionsQuery({ limit: 1000, fields: "_id name" });
   const { data: tourTypeData, isLoading: tourTypeLoading } =
-    useGetTourTypesQuery(undefined);
+    useGetTourTypesQuery({ limit: 1000, fields: "_id name" });
 
   const divisionOptions =
     divisionData?.data?.map((division: { _id: string; name: string }) => ({
@@ -31,7 +31,7 @@ const TourFilter = () => {
     })) || [];
 
   const tourTypeOptions =
-    tourTypeData?.map((type: { _id: string; name: string }) => ({
+    tourTypeData?.data?.map((type: { _id: string; name: string }) => ({
       id: type._id,
       name: type.name,
     })) || [];

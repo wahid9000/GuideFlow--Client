@@ -21,21 +21,22 @@ export const tourApi = baseApi.injectEndpoints({
         invalidatesTags: ["TOUR"],
       }),
       getTourTypes: builder.query({
-        query: () => ({
+        query: (params) => ({
           url: "/tour/tour-types",
           method: "GET",
+          params: params,
         }),
         providesTags: ["TOUR_TYPE"],
         transformResponse: (response) => response.data,
       }),
-      getTours: builder.query<ITour[], unknown>({
+      getTours: builder.query({
         query: (params) => ({
           url: "/tour",
           method: "GET",
           params: params,
         }),
         providesTags: ["TOUR"],
-        transformResponse: (response: IResponse<ITour[]>) => response.data,
+        transformResponse: (response) => response.data,
       }),
       getSingleTour: builder.query<ITour, unknown>({
         query: (slug) => ({

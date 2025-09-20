@@ -63,7 +63,7 @@ const AddTourTypeModal = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="text-white cursor-pointer">
+        <Button className="text-white bg-blue-950 cursor-pointer">
           <PlusCircle /> Add Tour Type
         </Button>
       </DialogTrigger>
@@ -105,7 +105,7 @@ const AddTourTypeModal = () => {
             disabled={isLoading}
             type="submit"
             form="addTourType"
-            className="cursor-pointer text-white"
+            className="cursor-pointer text-white bg-blue-950"
           >
             {isLoading ? "Adding..." : "Add"}
           </Button>

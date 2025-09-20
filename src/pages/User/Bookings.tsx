@@ -17,6 +17,7 @@ import { BookingSkeleton } from "@/components/skeletons/BookingSkeleton";
 import { useEffect, useState } from "react";
 import { useCreateBookingMutation } from "@/redux/features/booking/booking.api";
 import { toast } from "sonner";
+import { format } from "date-fns";
 
 const Bookings = () => {
   const { slug } = useParams();
@@ -69,8 +70,8 @@ const Bookings = () => {
       console.log("🚀 ~ handleBooking ~ res:", res);
       if (res.success) {
         toast.success("Booking created successfully", { id: toastId });
-        if(res.data.paymentUrl) {
-          window.open(res.data.paymentUrl)
+        if (res.data.paymentUrl) {
+          window.open(res.data.paymentUrl);
         }
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -120,8 +121,8 @@ const Bookings = () => {
                     Duration
                   </h4>
                   <p className="font-semibold text-foreground">
-                    {new Date(tour.startDate).toLocaleDateString()} to{" "}
-                    {new Date(tour.endDate).toLocaleDateString()}
+                    {format(tour.startDate, "PP")} to{" "}
+                    {format(tour.endDate, "PP")}
                   </p>
                 </div>
               </div>
@@ -235,8 +236,10 @@ const Bookings = () => {
                   <div className="flex items-center gap-2 text-foreground">
                     <Calendar className="h-4 w-4" />
                     <p className="font-medium text-sm">
-                      {new Date(tour.startDate).toLocaleDateString()} to{" "}
-                      {new Date(tour.endDate).toLocaleDateString()}
+                      <p className="font-semibold text-foreground">
+                        {format(tour.startDate, "PP")} to{" "}
+                        {format(tour.endDate, "PP")}
+                      </p>
                     </p>
                   </div>
                 </div>

@@ -7,6 +7,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
 import { EditIcon, Trash } from "lucide-react";
 import { toast } from "sonner";
@@ -23,11 +31,16 @@ import {
 } from "@/redux/features/tour/tour.api";
 import ViewTourModal from "@/components/modules/Admin/Tour/ViewTourModal";
 import type { ITour } from "@/types";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 const Tours = () => {
-  const { data: tourData } = useGetToursQuery(undefined);
-  const data = tourData;
-  // const meta = tourData?.meta;
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data: tourData } = useGetToursQuery({ page: currentPage, limit: 10 });
+  const data = tourData?.data;
+  const meta = tourData?.meta;
+
+  const totalPage = meta?.totalPage || 1;
 
   const [deletTour] = useDeleteTourMutation();
   const handleDeleteTour = async (tourId: string) => {
@@ -119,6 +132,57 @@ const Tours = () => {
           </TableBody>
         </Table>
       </div>
+      {totalPage > 1 && (
+        <div className="mt-4">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  className={cn(
+                    currentPage === 1
+                      ? "pointer-events-none cursor-none opacity-50"
+                      : "cursor-pointer pointer-events-auto"
+                  )}
+                  onClick={() => setCurrentPage((prev) => prev - 1)}
+                />
+              </PaginationItem>
+              {Array.from({ length: totalPage }, (_, index) => index + 1).map(
+                (page) => (
+                  <PaginationItem
+                    className="cursor-pointer"
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                  >
+                    <PaginationLink
+                      className={cn(
+                        currentPage === page &&
+                          "bg-blue-950 text-white hover:bg-blue-800 hover:text-white"
+                      )}
+                      isActive={currentPage === page}
+                    >
+                      {page}
+                    </PaginationLink>
+                  </PaginationItem>
+                )
+              )}
+
+              <PaginationItem>
+                <PaginationLink></PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext
+                  className={cn(
+                    currentPage === totalPage
+                      ? "pointer-events-none cursor-none opacity-50"
+                      : "cursor-pointer pointer-events-auto"
+                  )}
+                  onClick={() => setCurrentPage((prev) => prev + 1)}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
     </div>
   );
 };

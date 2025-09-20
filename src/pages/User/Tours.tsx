@@ -6,6 +6,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import {
   Carousel,
   CarouselContent,
   CarouselItem,
@@ -21,8 +29,11 @@ import { Badge } from "@/components/ui/badge";
 import { TourCardSkeleton } from "@/components/skeletons/ToursCardSkeleton";
 import { ArrowBigRightIcon } from "lucide-react";
 import TourFilter from "@/components/modules/User/Tour/TourFilter";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 const Tours = () => {
+  const [currentPage, setCurrentPage] = useState(1);
   const [searchParams] = useSearchParams();
 
   const selectedDivision = searchParams.get("division") || undefined;
@@ -31,8 +42,13 @@ const Tours = () => {
   const { data: tourData, isLoading } = useGetToursQuery({
     division: selectedDivision,
     tourType: selectedTourType,
+    limit: 3,
+    page: currentPage,
   });
-  const tours: ITour[] = tourData || [];
+  const tours: ITour[] = tourData?.data || [];
+  const meta = tourData?.meta;
+
+  const totalPage = meta?.totalPage || 1;
 
   return (
     <>
@@ -175,6 +191,59 @@ const Tours = () => {
           </div>
         </div>
       </div>
+      {totalPage > 1 && (
+        <div className=" justify-end flex px-4 py-2 container mx-auto">
+          <div>
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    className={cn(
+                      currentPage === 1
+                        ? "pointer-events-none cursor-none opacity-50"
+                        : "cursor-pointer pointer-events-auto"
+                    )}
+                    onClick={() => setCurrentPage((prev) => prev - 1)}
+                  />
+                </PaginationItem>
+                {Array.from({ length: totalPage }, (_, index) => index + 1).map(
+                  (page) => (
+                    <PaginationItem
+                      className="cursor-pointer"
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                    >
+                      <PaginationLink
+                        className={cn(
+                          currentPage === page &&
+                            "bg-blue-950 text-white hover:bg-blue-800 hover:text-white"
+                        )}
+                        isActive={currentPage === page}
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  )
+                )}
+
+                <PaginationItem>
+                  <PaginationLink></PaginationLink>
+                </PaginationItem>
+                <PaginationItem>
+                  <PaginationNext
+                    className={cn(
+                      currentPage === totalPage
+                        ? "pointer-events-none cursor-none opacity-50"
+                        : "cursor-pointer pointer-events-auto"
+                    )}
+                    onClick={() => setCurrentPage((prev) => prev + 1)}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
+        </div>
+      )}
     </>
   );
 };

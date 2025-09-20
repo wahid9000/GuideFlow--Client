@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TourDetailsSkeleton } from "@/components/skeletons/TourDetailSkeleton";
+import { format } from "date-fns";
 
 const TourDetails = () => {
   const { slug } = useParams();
@@ -105,8 +106,8 @@ const TourDetails = () => {
                     Duration
                   </h4>
                   <p className="font-semibold text-foreground">
-                    {new Date(tour.startDate).toLocaleDateString()} to{" "}
-                    {new Date(tour.endDate).toLocaleDateString()}
+                    {format(tour.startDate, "PP")} to{" "}
+                    {format(tour.endDate, "PP")}
                   </p>
                 </div>
               </div>

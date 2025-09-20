@@ -216,7 +216,7 @@ const AddTourModal = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="text-white cursor-pointer">
+        <Button className="text-white bg-blue-950 cursor-pointer">
           <PlusCircle /> Add Tour
         </Button>
       </DialogTrigger>
@@ -363,7 +363,7 @@ const AddTourModal = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {tourTypeData?.map(
+                        {tourTypeData?.data?.map(
                           (tourType: { _id: string; name: string }) => (
                             <SelectItem key={tourType._id} value={tourType._id}>
                               {tourType.name}
@@ -785,7 +785,7 @@ const AddTourModal = () => {
             </>
           </form>
         </Form>
-        <DialogFooter>
+        <DialogFooter className="mt-5">
           <DialogClose asChild>
             <Button className="cursor-pointer" variant="outline">
               Cancel
@@ -795,7 +795,7 @@ const AddTourModal = () => {
             disabled={false}
             type="submit"
             form="addTourType"
-            className="cursor-pointer text-white"
+            className="cursor-pointer text-white bg-blue-950"
           >
             Add
           </Button>

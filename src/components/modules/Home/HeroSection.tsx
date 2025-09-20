@@ -47,7 +47,10 @@ const HeroSection = () => {
             </p>
             <div className="flex w-full flex-col justify-center gap-2 sm:flex-row lg:justify-start">
               {buttons?.primary && (
-                <Button asChild className="w-full text-white sm:w-auto">
+                <Button
+                  asChild
+                  className="w-full bg-blue-950 text-white sm:w-auto"
+                >
                   <Link to={buttons.primary.url}>{buttons.primary.text}</Link>
                 </Button>
               )}
