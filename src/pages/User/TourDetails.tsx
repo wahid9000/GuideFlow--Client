@@ -13,6 +13,7 @@ import {
   List,
   Plus,
   Minus,
+  HomeIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TourDetailsSkeleton } from "@/components/skeletons/TourDetailSkeleton";
@@ -22,6 +23,7 @@ const TourDetails = () => {
   const { slug } = useParams();
   const { data, isLoading, isError } = useGetSingleTourQuery(slug);
   const tour = data ?? ({} as ITour);
+  console.log("🚀 ~ TourDetails ~ tour:", tour);
 
   if (isLoading) {
     return <TourDetailsSkeleton />;
@@ -106,19 +108,19 @@ const TourDetails = () => {
                     Duration
                   </h4>
                   <p className="font-semibold text-foreground">
-                    {format(tour.startDate, "PP")} to{" "}
-                    {format(tour.endDate, "PP")}
+                    {format(tour?.startDate, "PP")} to{" "}
+                    {format(tour?.endDate, "PP")}
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-4 p-4 rounded-xl  border border-gray-100">
-                <MapPin className="h-6 w-6 text-blue-500 flex-shrink-0 mt-1" />
+                <HomeIcon className="h-6 w-6 text-blue-500 flex-shrink-0 mt-1" />
                 <div>
                   <h4 className="text-sm font-medium text-foreground">
-                    Location
+                    Division
                   </h4>
                   <p className="font-semibold text-foreground">
-                    {tour.location ?? "N/A"}
+                    {tour.division.name ?? "N/A"}
                   </p>
                 </div>
               </div>

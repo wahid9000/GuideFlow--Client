@@ -121,8 +121,8 @@ const Bookings = () => {
                     Duration
                   </h4>
                   <p className="font-semibold text-foreground">
-                    {format(tour.startDate, "PP")} to{" "}
-                    {format(tour.endDate, "PP")}
+                    {format(tour?.startDate, "PP")} to{" "}
+                    {format(tour?.endDate, "PP")}
                   </p>
                 </div>
               </div>
@@ -237,8 +237,8 @@ const Bookings = () => {
                     <Calendar className="h-4 w-4" />
                     <p className="font-medium text-sm">
                       <p className="font-semibold text-foreground">
-                        {format(tour.startDate, "PP")} to{" "}
-                        {format(tour.endDate, "PP")}
+                        {format(tour?.startDate, "PP")} to{" "}
+                        {format(tour?.endDate, "PP")}
                       </p>
                     </p>
                   </div>

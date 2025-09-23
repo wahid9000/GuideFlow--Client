@@ -3,7 +3,7 @@ export interface ITour {
   title: string;
   slug: string;
   description: string;
-  division: string; // division id
+  division: { _id: string; name: string };
   tourType: string; // tour type id
   amenities: string[];
   included: string[];
