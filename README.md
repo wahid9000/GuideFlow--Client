@@ -8,10 +8,7 @@ A modern frontend for the **Tour Management System**, built with **React**, **Re
 
 - [Features](#features)  
 - [Tech Stack](#tech-stack)  
-- [Project Structure](#project-structure)  
 - [Setup & Installation](#setup--installation)  
-- [Available Scripts](#available-scripts)  
-- [Usage](#usage)  
 
 ---
 
