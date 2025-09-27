@@ -1,6 +1,5 @@
 import config from "@/config";
 import axios, { type AxiosRequestConfig } from "axios";
-import { isLoggedOut } from "./authState";
 
 export const axiosInstance = axios.create({
   baseURL: config.baseUrl,
@@ -44,10 +43,6 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   async (error) => {
-    if (isLoggedOut) {
-      return Promise.reject(error);
-    }
-
     const originalRequest = error.config as AxiosRequestConfig & {
       _retry: boolean;
     };
