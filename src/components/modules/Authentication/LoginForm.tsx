@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Password from "@/components/ui/Password";
 import config from "@/config";
+import { setLoggedOut } from "@/lib/authState";
 import { useLoginMutation } from "@/redux/features/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -51,6 +52,7 @@ const LoginForm = () => {
     try {
       const result = await login(authInfo).unwrap();
       if (result) {
+        setLoggedOut(false);
         toast.success("User logged In successfully", { id: toastId });
         navigate("/");
       }

@@ -30,6 +30,7 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import SearchSection from "../modules/Navbar/SearchSection";
+import { setLoggedOut } from "@/lib/authState";
 
 const navigationLinks = [
   { href: "/", label: "Home", role: "PUBLIC" },
@@ -50,6 +51,9 @@ export default function Navbar() {
   const handleLogout = async () => {
     await logout(undefined);
     dispatch(authApi.util.resetApiState());
+
+    setLoggedOut(true);
+
     toast.success("Logout successful");
   };
 

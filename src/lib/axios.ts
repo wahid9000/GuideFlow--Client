@@ -1,5 +1,6 @@
 import config from "@/config";
 import axios, { type AxiosRequestConfig } from "axios";
+import { isLoggedOut } from "./authState";
 
 export const axiosInstance = axios.create({
   baseURL: config.baseUrl,
@@ -43,13 +44,22 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   async (error) => {
-    const originalRequest = error.config as AxiosRequestConfig;
+    if (isLoggedOut) {
+      return Promise.reject(error);
+    }
+
+    const originalRequest = error.config as AxiosRequestConfig & {
+      _retry: boolean;
+    };
 
     if (
       error.response.status === 500 &&
-      error.response.data.message === "jwt expired"
+      error.response.data.message === "jwt expired" &&
+      !originalRequest._retry //handling infinity loop
     ) {
       console.log("Your token is expired");
+
+      originalRequest._retry = true;
 
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
@@ -59,7 +69,7 @@ axiosInstance.interceptors.response.use(
           .catch((error) => Promise.reject(error));
       }
 
-      isRefreshing = true;      
+      isRefreshing = true;
       try {
         const res = await axiosInstance.post("/auth/refresh-token");
         console.log("Token recieved", res);
@@ -74,5 +84,7 @@ axiosInstance.interceptors.response.use(
         isRefreshing = false;
       }
     }
+    //* For Everything
+    return Promise.reject(error);
   }
 );

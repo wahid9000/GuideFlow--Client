@@ -22,6 +22,7 @@ import { format } from "date-fns";
 const Bookings = () => {
   const { slug } = useParams();
   const { data, isLoading, isError } = useGetSingleTourQuery(slug);
+  console.log("🚀 ~ Bookings ~ data:", data)
   const tour = data ?? ({} as ITour);
   const [createBooking, { isLoading: bookingLoading }] =
     useCreateBookingMutation();
@@ -57,17 +58,15 @@ const Bookings = () => {
   const handleBooking = async () => {
     const toastId = toast.loading("Please wait...");
     let bookingData;
-    if (data) {
+    if (tour) {
       bookingData = {
         tour: tour._id,
         guestCount: guestCount,
       };
-      console.log("🚀 ~ handleBooking ~ bookingData:", bookingData);
     }
 
     try {
       const res = await createBooking(bookingData).unwrap();
-      console.log("🚀 ~ handleBooking ~ res:", res);
       if (res.success) {
         toast.success("Booking created successfully", { id: toastId });
         if (res.data.paymentUrl) {
