@@ -1,15 +1,15 @@
 import { lazy } from "react";
-const Bookings = lazy(() => import("@/pages/User/Bookings"));
+const MyBookings = lazy(() => import("@/pages/User/MyBookings"));
 import type { ISidebarItem } from "@/types";
 
 export const userSidebarItems: ISidebarItem[] = [
   {
-    title: "History",
+    title: "Booking History",
     items: [
       {
-        title: "Bookings",
-        url: "/user/bookings",
-        component: Bookings,
+        title: "My Bookings",
+        url: "/user/my-bookings",
+        component: MyBookings,
       },
     ],
   },
