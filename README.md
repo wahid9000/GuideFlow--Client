@@ -1,70 +1,60 @@
-# React + TypeScript + Vite
+# Tour Management System Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern frontend for the **Tour Management System**, built with **React**, **Redux RTK Query**,**Tailwind CSS**, **Shadcn UI** & **Origin UI**. It provides dashboards and features for **Superadmin**, **Admin**, and **User** roles, allowing users to browse and book tours, while admins manage tours, tour types, divisions.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Table of Contents
 
-## Expanding the ESLint configuration
+- [Features](#features)  
+- [Tech Stack](#tech-stack)  
+- [Project Structure](#project-structure)  
+- [Setup & Installation](#setup--installation)  
+- [Available Scripts](#available-scripts)  
+- [Usage](#usage)  
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Features
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- **Role-based dashboards**: Superadmin, Admin, User  
+- **Tour browsing and booking** with SSL Commerz integration  
+- **Admin features**: Create tour types, tours, divisions
+- **User profile management**: Update profile, view bookings
+- **Responsive UI** built with Shadcn components, Tailwind CSS, Origin UI 
+- **State management and API calls** handled by Redux RTK Query  
+- **File uploads** for tours
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Tech Stack
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Frontend:** React.js, Redux RTK Query  
+- **UI Library:** Shadcn UI  
+- **Routing:** React Router DOM  
+- **State Management:** Redux Toolkit  
+- **Styling:** Tailwind CSS
+- **Forms & Validation:** React Hook Form
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-# tour-management-frontend
+---
+
+## Setup & Installation
+
+1. **Clone the repository**  
+   ```bash
+   git clone <repo-url>
+   cd tour-management-frontend
+
+2. **Install dependencies**  
+   ```bash
+   pnpm install
+
+3. **Setup environment variables**  
+   ```bash
+   Create a .env file using env.example
+
+4. **Start the server**  
+   ```bash
+   pnpm run dev
+
+

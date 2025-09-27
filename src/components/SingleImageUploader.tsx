@@ -6,7 +6,8 @@ import { useEffect } from "react";
 export default function SingleImageUploader({
   setImage,
 }: {
-  setImage: File | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setImage: any;
 }) {
   const maxSizeMB = 5;
   const maxSize = maxSizeMB * 1024 * 1024; // 5MB default
