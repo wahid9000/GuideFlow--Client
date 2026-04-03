@@ -22,7 +22,7 @@ const HeroSection = () => {
       },
       secondary: {
         text: "Watch Highlights",
-        url: "/contact",
+        url: "/",
       },
     },
   };
@@ -30,7 +30,7 @@ const HeroSection = () => {
   const { badge, heading, description, buttons } = heroInfo;
 
   return (
-    <section className="relative overflow-hidden py-24 lg:py-32">
+    <section className="relative overflow-hidden pt-24 lg:py-32">
       {/* Background Decorative Elements */}
       <div className="pointer-events-none absolute inset-0 -z-10">
         <div className="absolute inset-x-0 top-0 h-[500px] bg-gradient-to-b from-blue-50/50 to-transparent" />

@@ -28,7 +28,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar {...props}>
       <SidebarHeader>
         <Link className="flex justify-start items-center gap-2" to={"/"}>
-          <Logo /> <h1 className="text-2xl font-bold">TourUs</h1>
+          <Logo /> <h1 className="text-2xl font-bold">GuideFlow</h1>
         </Link>
       </SidebarHeader>
       <SidebarContent>

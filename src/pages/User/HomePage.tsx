@@ -36,7 +36,7 @@ const HomePage = () => {
   };
 
   return (
-    <main className="space-y-24 pb-20">
+    <main className="space-y-24">
       <HeroSection />
 
       {/* 1. Explore Top Destinations (Grid with centered text) */}
