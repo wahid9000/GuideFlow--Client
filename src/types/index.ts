@@ -3,6 +3,7 @@ import type { ComponentType } from "react";
 export type { ISendOTP } from "./auth.type";
 export type { ILogin } from "./auth.type";
 export type { IVerifyOTP } from "./auth.type";
+export type { IUpdateUser, IUser } from "./auth.type";
 
 export type { IBooking } from "./booking.type";
 
