@@ -4,7 +4,7 @@ export type { ISendOTP } from "./auth.type";
 export type { ILogin } from "./auth.type";
 export type { IVerifyOTP } from "./auth.type";
 
-export type { ITour } from "./tour.type";
+export type { IBooking } from "./booking.type";
 
 export interface IResponse<T> {
   success: boolean;
