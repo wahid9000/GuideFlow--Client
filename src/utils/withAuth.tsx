@@ -1,19 +1,27 @@
-import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
+import { useAuth } from "@/context/auth.context";
 import type { TRole } from "@/types";
 import type { ComponentType } from "react";
 import { Navigate } from "react-router";
+import { Loader2 } from "lucide-react";
 
 export const withAuth = (Component: ComponentType, requiredRole?: TRole) => {
   const AuthWrapper = () => {
-    const { data, isLoading } = useUserInfoQuery(undefined);
-    const user = data?.data;
+    const { isAuthenticated, isLoading, user } = useAuth();
 
-    if (!isLoading && !user?.email) {
-      return <Navigate to="/login"></Navigate>;
+    if (isLoading) {
+      return (
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      );
     }
 
-    if (requiredRole && !isLoading && requiredRole !== user?.role) {
-      return <Navigate to="/unauthorized"></Navigate>;
+    if (!isAuthenticated) {
+      return <Navigate to="/login" />;
+    }
+
+    if (requiredRole && requiredRole !== user?.role) {
+      return <Navigate to="/unauthorized" />;
     }
 
     return <Component />;

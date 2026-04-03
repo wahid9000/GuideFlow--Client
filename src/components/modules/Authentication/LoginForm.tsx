@@ -19,12 +19,14 @@ import {
 import Password from "@/components/ui/Password";
 import config from "@/config";
 import { useLoginMutation } from "@/redux/features/auth/auth.api";
+import { baseApi } from "@/redux/baseApi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 import z from "zod";
 import { Loader2 } from "lucide-react";
+import { useDispatch } from "react-redux";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email" }),
@@ -33,6 +35,7 @@ const loginSchema = z.object({
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [login, { isLoading }] = useLoginMutation();
 
   const form = useForm<z.infer<typeof loginSchema>>({
@@ -48,6 +51,8 @@ const LoginForm = () => {
     try {
       const result = await login(data).unwrap();
       if (result) {
+        // Invalidate and refetch user info after successful login
+        dispatch(baseApi.util.invalidateTags(["USER"]));
         toast.success("Welcome back!", { id: toastId });
         navigate("/");
       }

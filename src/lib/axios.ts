@@ -15,7 +15,7 @@ axiosInstance.interceptors.request.use(
   function (error) {
     // Do something with request error
     return Promise.reject(error);
-  }
+  },
 );
 
 let isRefreshing = false;
@@ -48,11 +48,12 @@ axiosInstance.interceptors.response.use(
     };
 
     if (
-      error.response.status === 500 &&
-      error.response.data.message === "jwt expired" &&
+      (error.response?.status === 401 ||
+        (error.response?.status === 500 &&
+          error.response?.data?.message === "jwt expired")) &&
       !originalRequest._retry //handling infinity loop
     ) {
-      console.log("Your token is expired");
+      console.log("Token expired, attempting refresh");
 
       originalRequest._retry = true;
 
@@ -67,19 +68,22 @@ axiosInstance.interceptors.response.use(
       isRefreshing = true;
       try {
         const res = await axiosInstance.post("/auth/refresh-token");
-        console.log("Token recieved", res);
+        console.log("Token refreshed successfully", res);
 
         processQueue(null);
 
         return axiosInstance(originalRequest);
-      } catch (error) {
-        processQueue(error);
-        return Promise.reject(error);
+      } catch (refreshError) {
+        console.log("Token refresh failed", refreshError);
+        processQueue(refreshError);
+        // Clear any cached data and redirect to login
+        window.location.href = "/login";
+        return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;
       }
     }
     //* For Everything
     return Promise.reject(error);
-  }
+  },
 );
