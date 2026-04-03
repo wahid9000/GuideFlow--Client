@@ -23,7 +23,6 @@ import {
 import { useGetToursQuery } from "@/redux/features/tour/tour.api";
 import Autoplay from "embla-carousel-autoplay";
 import { Button } from "@/components/ui/button";
-import type { ITour } from "@/types";
 import { Link, useSearchParams } from "react-router";
 import { Badge } from "@/components/ui/badge";
 import { TourCardSkeleton } from "@/components/skeletons/ToursCardSkeleton";
@@ -31,6 +30,7 @@ import { ArrowBigRightIcon } from "lucide-react";
 import TourFilter from "@/components/modules/User/Tour/TourFilter";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import type { ITour } from "@/types/tour.type";
 
 const Tours = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -96,7 +96,7 @@ const Tours = () => {
                             className="relative h-full"
                           >
                             <CarouselContent>
-                              {tour.images.map((img, i) => (
+                              {tour.images.map((img: any, i: any) => (
                                 <CarouselItem key={i}>
                                   <img
                                     src={img}
@@ -118,7 +118,7 @@ const Tours = () => {
                               const days = Math.ceil(
                                 (new Date(tour.endDate).getTime() -
                                   new Date(tour.startDate).getTime()) /
-                                  (1000 * 60 * 60 * 24)
+                                  (1000 * 60 * 60 * 24),
                               );
                               return `${days} ${
                                 days > 1 ? "Days" : "Day"
@@ -155,14 +155,16 @@ const Tours = () => {
                     </div>
 
                     <div className="flex flex-wrap gap-2 mt-2">
-                      {tour.included.slice(0, 2).map((item, index) => (
-                        <span
-                          key={index}
-                          className="bg-blue-950 text-white text-xs px-2 py-1 rounded-md"
-                        >
-                          {item}
-                        </span>
-                      ))}
+                      {tour.included
+                        .slice(0, 2)
+                        .map((item: any, index: any) => (
+                          <span
+                            key={index}
+                            className="bg-blue-950 text-white text-xs px-2 py-1 rounded-md"
+                          >
+                            {item}
+                          </span>
+                        ))}
 
                       {tour.included.length > 2 && (
                         <span className="bg-blue-950 text-white text-xs px-2 py-1 rounded-md">
@@ -201,7 +203,7 @@ const Tours = () => {
                     className={cn(
                       currentPage === 1
                         ? "pointer-events-none cursor-none opacity-50"
-                        : "cursor-pointer pointer-events-auto"
+                        : "cursor-pointer pointer-events-auto",
                     )}
                     onClick={() => setCurrentPage((prev) => prev - 1)}
                   />
@@ -216,14 +218,14 @@ const Tours = () => {
                       <PaginationLink
                         className={cn(
                           currentPage === page &&
-                            "bg-blue-950 text-white hover:bg-blue-800 hover:text-white"
+                            "bg-blue-950 text-white hover:bg-blue-800 hover:text-white",
                         )}
                         isActive={currentPage === page}
                       >
                         {page}
                       </PaginationLink>
                     </PaginationItem>
-                  )
+                  ),
                 )}
 
                 <PaginationItem>
@@ -234,7 +236,7 @@ const Tours = () => {
                     className={cn(
                       currentPage === totalPage
                         ? "pointer-events-none cursor-none opacity-50"
-                        : "cursor-pointer pointer-events-auto"
+                        : "cursor-pointer pointer-events-auto",
                     )}
                     onClick={() => setCurrentPage((prev) => prev + 1)}
                   />

@@ -17,7 +17,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Eye } from "lucide-react";
 import { useState } from "react";
-import type { ITour } from "@/types";
+import type { ITour } from "@/types/tour.type";
 
 const ViewTourModal = ({ tour }: { tour: ITour }) => {
   const [open, setOpen] = useState(false);
@@ -42,10 +42,10 @@ const ViewTourModal = ({ tour }: { tour: ITour }) => {
           </div>
 
           {tour.images.length > 0 && (
-            <div className="relative max-w-[350px] mx-auto">
+            <div className="relative max-w-87.5 mx-auto">
               <Carousel className="relative">
                 <CarouselContent>
-                  {tour.images.map((img, i) => (
+                  {tour.images.map((img: any, i: any) => (
                     <CarouselItem key={i}>
                       <img
                         src={img}
@@ -121,7 +121,7 @@ const ViewTourModal = ({ tour }: { tour: ITour }) => {
           <div>
             <h3 className="text-lg font-semibold mb-2">Included</h3>
             <ul className="list-disc list-inside text-foreground">
-              {tour.included?.map((item, idx) => (
+              {tour.included?.map((item: any, idx: any) => (
                 <li key={idx}>{item}</li>
               ))}
             </ul>
@@ -129,7 +129,7 @@ const ViewTourModal = ({ tour }: { tour: ITour }) => {
           <div>
             <h3 className="text-lg font-semibold mb-2">Excluded</h3>
             <ul className="list-disc list-inside text-foreground">
-              {tour.excluded?.map((item, idx) => (
+              {tour.excluded?.map((item: any, idx: any) => (
                 <li key={idx}>{item}</li>
               ))}
             </ul>
@@ -143,7 +143,7 @@ const ViewTourModal = ({ tour }: { tour: ITour }) => {
             <div>
               <h3 className="text-lg font-semibold mb-2">Amenities</h3>
               <ul className="list-disc list-inside text-foreground">
-                {tour.amenities.map((item, idx) => (
+                {tour.amenities.map((item: any, idx: any ) => (
                   <li key={idx}>{item}</li>
                 ))}
               </ul>
@@ -154,7 +154,7 @@ const ViewTourModal = ({ tour }: { tour: ITour }) => {
             <div>
               <h3 className="text-lg font-semibold mb-2">Tour Plan</h3>
               <ul className="list-disc list-inside text-foreground">
-                {tour.tourPlan.map((plan, idx) => (
+                {tour.tourPlan.map((plan: any, idx: any) => (
                   <li key={idx}>{plan}</li>
                 ))}
               </ul>

@@ -1,7 +1,6 @@
 import { useGetSingleTourQuery } from "@/redux/features/tour/tour.api";
 import { Link, useParams } from "react-router";
 import { Separator } from "@/components/ui/separator";
-import type { ITour } from "@/types";
 import {
   BookIcon,
   CircleDollarSignIcon,
@@ -18,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { TourDetailsSkeleton } from "@/components/skeletons/TourDetailSkeleton";
 import { format } from "date-fns";
+import type { ITour } from "@/types/tour.type";
 
 const TourDetails = () => {
   const { slug } = useParams();
@@ -68,7 +68,7 @@ const TourDetails = () => {
       {tour?.images?.length > 0 && (
         <section className="mb-10">
           <div className="grid grid-cols-2 gap-5 md:grid-cols-3">
-            {tour.images.map((img, i) => (
+            {tour.images.map((img: any, i: any) => (
               <img
                 key={i}
                 src={img}
@@ -162,7 +162,7 @@ const TourDetails = () => {
                   <Plus className="text-green-500" /> Included
                 </h3>
                 <ul className="list-none space-y-2 text-foreground">
-                  {tour.included?.map((item, idx) => (
+                  {tour.included?.map((item: any, idx: any) => (
                     <li key={idx} className="flex items-center gap-2">
                       <div className="w-1.5 h-1.5 rounded-full bg-green-500 flex-shrink-0" />
                       {item}
@@ -175,7 +175,7 @@ const TourDetails = () => {
                   <Minus className="text-red-500" /> Excluded
                 </h3>
                 <ul className="list-none space-y-2 text-foreground">
-                  {tour.excluded?.map((item, idx) => (
+                  {tour.excluded?.map((item: any, idx: any) => (
                     <li key={idx} className="flex items-center gap-2">
                       <div className="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
                       {item}
@@ -200,7 +200,7 @@ const TourDetails = () => {
                     <List className="text-purple-500" /> Amenities
                   </h3>
                   <ul className="list-none space-y-2 text-foreground">
-                    {tour.amenities.map((item, idx) => (
+                    {tour.amenities.map((item: any, idx: any) => (
                       <li key={idx} className="flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-purple-500 flex-shrink-0" />
                         {item}
@@ -216,7 +216,7 @@ const TourDetails = () => {
                     <Clock className="text-orange-500" /> Tour Plan
                   </h3>
                   <ul className="list-none space-y-2 text-foreground">
-                    {tour.tourPlan.map((plan, idx) => (
+                    {tour.tourPlan.map((plan: any, idx: any) => (
                       <li key={idx} className="flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-orange-500 flex-shrink-0" />
                         {plan}

@@ -30,9 +30,9 @@ import {
   useGetToursQuery,
 } from "@/redux/features/tour/tour.api";
 import ViewTourModal from "@/components/modules/Admin/Tour/ViewTourModal";
-import type { ITour } from "@/types";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import type { ITour } from "@/types/tour.type";
 
 const Tours = () => {
   const [currentPage, setCurrentPage] = useState(1);

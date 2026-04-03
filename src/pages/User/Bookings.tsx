@@ -1,5 +1,4 @@
 import { useGetSingleTourQuery } from "@/redux/features/tour/tour.api";
-import type { ITour } from "@/types";
 import { useParams } from "react-router";
 import { Separator } from "@/components/ui/separator"; // Assuming you have this
 import {
@@ -18,6 +17,7 @@ import { useEffect, useState } from "react";
 import { useCreateBookingMutation } from "@/redux/features/booking/booking.api";
 import { toast } from "sonner";
 import { format } from "date-fns";
+import type { ITour } from "@/types/tour.type";
 
 const Bookings = () => {
   const { slug } = useParams();
@@ -168,7 +168,7 @@ const Bookings = () => {
               What's Included
             </h2>
             <ul className="grid sm:grid-cols-2 gap-y-2 gap-x-8 text-foreground list-none">
-              {tour.included?.map((item, idx) => (
+              {tour.included?.map((item: any, idx: any) => (
                 <li key={idx} className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-blue-950 flex-shrink-0" />
                   {item}
