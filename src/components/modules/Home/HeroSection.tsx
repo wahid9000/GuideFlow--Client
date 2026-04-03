@@ -1,10 +1,8 @@
 import {
   ArrowRight,
   ArrowUpRight,
-  Globe,
-  MapPin,
+  Play,
   Star,
-  Users,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -13,17 +11,17 @@ import { Link } from "react-router";
 
 const HeroSection = () => {
   const heroInfo = {
-    badge: "🌍 Explore the World",
+    badge: "New: Summer 2026 Destinations Out Now",
     heading: "Make Your World Tour Truly Memorable",
     description:
-      "Discover beautiful destinations, enjoy guided tours, and create unforgettable memories. Book your next adventure with us today!",
+      "Discover hand-picked beautiful destinations, enjoy expert-guided tours, and create unforgettable memories. Your next adventure is just a click away.",
     buttons: {
       primary: {
-        text: "View All Tours",
+        text: "Explore All Tours",
         url: "/tours",
       },
       secondary: {
-        text: "Contact Us",
+        text: "Watch Highlights",
         url: "/contact",
       },
     },
@@ -32,75 +30,98 @@ const HeroSection = () => {
   const { badge, heading, description, buttons } = heroInfo;
 
   return (
-    <section className="py-32">
-      <div className="container">
-        <div className="grid items-center gap-8 lg:grid-cols-2">
-          <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
-            {badge && (
-              <Badge variant="outline">
-                {badge}
-                <ArrowUpRight className="ml-2 size-4" />
-              </Badge>
+    <section className="relative overflow-hidden py-24 lg:py-32">
+      {/* Background Decorative Elements */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute inset-x-0 top-0 h-[500px] bg-gradient-to-b from-blue-50/50 to-transparent" />
+        <div className="absolute left-1/2 top-0 -translate-x-1/2 blur-3xl">
+          <div className="aspect-[1100/500] w-[70rem] bg-gradient-to-tr from-[#90f1ff] to-[#7786fe] opacity-20" />
+        </div>
+      </div>
+
+      <div className="container relative z-10">
+        <div className="mx-auto flex max-w-[980px] flex-col items-center gap-4 text-center">
+          {/* Modern Animated Badge */}
+          {badge && (
+            <Badge 
+              variant="secondary" 
+              className="px-4 py-1.5 text-sm font-medium transition-all hover:bg-secondary/80 cursor-default border-blue-100 bg-blue-50/50 text-blue-700"
+            >
+              {badge}
+              <ArrowUpRight className="ml-2 size-3.5" />
+            </Badge>
+          )}
+
+          {/* Hero Heading */}
+          <h1 className="text-balance text-5xl font-extrabold tracking-tight sm:text-6xl md:text-7xl lg:leading-[1.1]">
+            {heading.split('Truly').map((part, i) => i === 0 ? part : (
+              <span key={part} className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                Truly {part}
+              </span>
+            ))}
+          </h1>
+
+          {/* Hero Description */}
+          <p className="mt-4 max-w-[700px] text-balance text-lg text-muted-foreground sm:text-xl">
+            {description}
+          </p>
+
+          {/* CTA Buttons */}
+          <div className="mt-8 flex w-full flex-col items-center justify-center gap-4 sm:flex-row">
+            {buttons?.primary && (
+              <Button
+                asChild
+                size="lg"
+                className="h-12 w-full rounded-full bg-blue-600 px-8 text-base shadow-lg shadow-blue-200 transition-all hover:bg-blue-700 hover:shadow-xl sm:w-auto"
+              >
+                <Link to={buttons.primary.url}>
+                  {buttons.primary.text}
+                  <ArrowRight className="ml-2 size-4" />
+                </Link>
+              </Button>
             )}
-            <h1 className="my-6 text-pretty text-4xl font-bold lg:text-6xl">
-              {heading}
-            </h1>
-            <p className="text-muted-foreground mb-8 max-w-xl lg:text-xl">
-              {description}
-            </p>
-            <div className="flex w-full flex-col justify-center gap-2 sm:flex-row lg:justify-start">
-              {buttons?.primary && (
-                <Button
-                  asChild
-                  className="w-full bg-blue-950 text-white sm:w-auto"
-                >
-                  <Link to={buttons.primary.url}>{buttons.primary.text}</Link>
-                </Button>
-              )}
-              {buttons?.secondary && (
-                <Button asChild variant="outline" className="w-full sm:w-auto">
-                  <Link to={buttons.secondary.url}>
-                    {buttons.secondary.text}
-                    <ArrowRight className="size-4" />
-                  </Link>
-                </Button>
-              )}
-            </div>
+            {buttons?.secondary && (
+              <Button 
+                asChild 
+                variant="ghost" 
+                size="lg" 
+                className="h-12 w-full rounded-full px-8 text-base sm:w-auto"
+              >
+                <Link to={buttons.secondary.url} className="flex items-center gap-2">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                    <Play className="ml-0.5 size-3 fill-current" />
+                  </span>
+                  {buttons.secondary.text}
+                </Link>
+              </Button>
+            )}
           </div>
-          <div className="relative flex items-center justify-center max-h-96 w-full rounded-md bg-gradient-to-br from-blue-50 to-blue-100 overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 via-purple-400/20 to-pink-400/20 animate-pulse"></div>
-            <div className="relative z-10 flex flex-col items-center space-y-4">
-              <Globe className="h-16 w-16 text-blue-600 animate-bounce" />
-              <MapPin
-                className="h-12 w-12 text-green-600 animate-spin"
-                style={{ animationDuration: "3s" }}
-              />
-              <Star className="h-10 w-10 text-yellow-500 animate-ping" />
-              <Users className="h-14 w-14 text-purple-600 animate-pulse" />
+
+          {/* Social Proof / Trust Pilot Style */}
+          <div className="mt-12 flex flex-col items-center gap-4 border-t pt-8">
+            <div className="flex -space-x-3">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="inline-block h-10 w-10 rounded-full border-2 border-background bg-slate-200">
+                   <img 
+                    src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i}`} 
+                    alt="User"
+                    className="rounded-full"
+                  />
+                </div>
+              ))}
+              <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-background bg-blue-600 text-[10px] font-bold text-white">
+                +2k
+              </div>
             </div>
-            <div
-              className="absolute top-10 left-10 animate-bounce"
-              style={{ animationDelay: "0.5s" }}
-            >
-              <Globe className="h-8 w-8 text-blue-400" />
-            </div>
-            <div
-              className="absolute bottom-10 right-10 animate-spin"
-              style={{ animationDelay: "1s", animationDuration: "4s" }}
-            >
-              <MapPin className="h-6 w-6 text-green-400" />
-            </div>
-            <div
-              className="absolute top-1/2 left-5 animate-ping"
-              style={{ animationDelay: "1.5s" }}
-            >
-              <Star className="h-5 w-5 text-yellow-400" />
-            </div>
-            <div
-              className="absolute bottom-5 left-1/2 animate-pulse"
-              style={{ animationDelay: "2s" }}
-            >
-              <Users className="h-7 w-7 text-purple-400" />
+            <div className="flex items-center gap-1.5">
+              <div className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="size-4 fill-yellow-400 text-yellow-400" />
+                ))}
+              </div>
+              <p className="text-sm font-medium">
+                4.9/5 <span className="text-muted-foreground font-normal">from over 5,000+ happy travelers</span>
+              </p>
             </div>
           </div>
         </div>
