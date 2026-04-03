@@ -165,7 +165,7 @@ export default function Navbar() {
             <SheetContent side="left" className="w-[300px] sm:w-[400px]">
               <SheetHeader className="text-left">
                 <SheetTitle className="flex items-center gap-2">
-                  <Logo /> <span className="font-bold">TourEase</span>
+                  <Logo /> <span className="font-bold">GuideFlow</span>
                 </SheetTitle>
               </SheetHeader>
               <div className="flex flex-col gap-4 mt-8">
