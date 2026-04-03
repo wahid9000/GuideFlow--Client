@@ -72,7 +72,7 @@ export default function Navbar() {
           <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-90">
             <Logo />
             <span className="hidden font-bold text-xl tracking-tight sm:inline-block">
-              Tour<span className="text-blue-600">Ease</span>
+              Guide<span className="text-blue-600">Flow</span>
             </span>
           </Link>
 
