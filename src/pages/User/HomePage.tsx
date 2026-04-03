@@ -1,10 +1,9 @@
 import { useMemo } from "react";
 import { Link } from "react-router";
-import { ArrowRight, Globe, MapPin, Star, Users, Heart, Sparkles, ShieldCheck, Zap } from "lucide-react";
+import { ArrowRight, MapPin, Star, Heart, Sparkles, ShieldCheck, Zap } from "lucide-react";
 import HeroSection from "@/components/modules/Home/HeroSection";
 import { useGetDivisionsQuery } from "@/redux/features/division/division.api";
 import {
-  useGetTourTypesQuery,
   useGetToursQuery,
 } from "@/redux/features/tour/tour.api";
 import { Button } from "@/components/ui/button";
@@ -12,19 +11,16 @@ import {
   Card,
   CardContent,
   CardFooter,
-  CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 const HomePage = () => {
-  const { data: tourData, isLoading: toursLoading, isError: toursError } = useGetToursQuery({ limit: 12, page: 1 });
-  const { data: divisionData, isLoading: divisionsLoading, isError: divisionsError } = useGetDivisionsQuery({ limit: 10, page: 1 });
-  const { data: tourTypeData, isLoading: typesLoading, isError: typesError } = useGetTourTypesQuery({ limit: 8, page: 1 });
+  const { data: tourData } = useGetToursQuery({ limit: 12, page: 1 });
+  const { data: divisionData, isLoading: divisionsLoading } = useGetDivisionsQuery({ limit: 10, page: 1 });
 
   const tours = useMemo(() => tourData?.data || [], [tourData?.data]);
   const divisions = useMemo(() => divisionData?.data || [], [divisionData?.data]);
-  const tourTypes = useMemo(() => tourTypeData?.data || [], [tourTypeData?.data]);
 
   const featuredTours = useMemo(() => {
     if (!tours || tours.length === 0) return [];
