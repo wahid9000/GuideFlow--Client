@@ -80,7 +80,7 @@ const HomePage = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {divisions.slice(0, 4).map((division) => (
+            {divisions.slice(0, 4).map((division: any) => (
               <Link
                 key={division._id}
                 to={`/tours?division=${division._id}`}
