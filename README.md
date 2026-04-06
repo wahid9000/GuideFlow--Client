@@ -978,19 +978,4 @@ export const NewPage = () => {
 
 ---
 
-## 📝 License
-
-This project is licensed under the **MIT License** - see LICENSE for details.
-
----
-
-## 📞 Support
-
-For issues or questions:
-
-- Create [GitHub Issue](https://github.com/yourusername/frontend-tour/issues)
-- Contact: your.email@example.com
-
----
-
 **Built with ❤️ using React & TypeScript**
